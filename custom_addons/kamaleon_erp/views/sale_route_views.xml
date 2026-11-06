@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vista Formulario de Rutas de Venta -->
+        <record id="view_kamaleon_sale_route_form" model="ir.ui.view">
+            <field name="name">kamaleon.sale.route.form</field>
+            <field name="model">kamaleon.sale.route</field>
+            <field name="arch" type="xml">
+                <form string="Ruta de Venta">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Nombre de la Ruta"/>
+                            <h1>
+                                <field name="name" placeholder="Ej. Ruta 1 - Coro Centro"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="user_id" placeholder="Seleccionar Vendedor..." options="{'no_create': True}"/>
+                                <field name="code" placeholder="Ej. R-01"/>
+                            </group>
+                            <group>
+                                <field name="active" widget="boolean_toggle"/>
+                                <field name="partner_count" string="Cantidad de Clientes"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Clientes Asignados" name="assigned_partners">
+                                <field name="partner_ids" widget="many2many" options="{'no_create': True, 'no_create_edit': True}">
+                                    <list string="Clientes en esta Ruta">
+                                        <field name="name"/>
+                                        <field name="x_rif"/>
+                                        <field name="phone"/>
+                                        <field name="street" string="Dirección"/>
+                                        <field name="street2" string="Dirección 2 / Referencia" optional="hide"/>
+                                        <field name="city"/>
+                                        <field name="user_id" string="Vendedor"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Notas" name="notes">
+                                <field name="notes" placeholder="Observaciones o indicaciones sobre esta ruta..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista Árbol / Lista de Rutas de Venta -->
+        <record id="view_kamaleon_sale_route_tree" model="ir.ui.view">
+            <field name="name">kamaleon.sale.route.tree</field>
+            <field name="model">kamaleon.sale.route</field>
+            <field name="arch" type="xml">
+                <list string="Rutas de Venta">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="user_id" string="Vendedor Asignado"/>
+                    <field name="partner_count" string="N° Clientes"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista Búsqueda de Rutas de Venta -->
+        <record id="view_kamaleon_sale_route_search" model="ir.ui.view">
+            <field name="name">kamaleon.sale.route.search</field>
+            <field name="model">kamaleon.sale.route</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Rutas">
+                    <field name="name" string="Nombre o Código"/>
+                    <field name="user_id"/>
+                    <filter string="Mis Rutas" name="my_routes" domain="[('user_id', '=', uid)]"/>
+                    <filter string="Archivados" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="Vendedor" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción Principal de Rutas de Venta -->
+        <record id="action_kamaleon_sale_route" model="ir.actions.act_window">
+            <field name="name">Rutas de Venta</field>
+            <field name="res_model">kamaleon.sale.route</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_kamaleon_sale_route_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Crea tu primera Ruta de Venta!
+                </p>
+                <p>
+                    Las rutas te permiten agrupar clientes existentes por zona o itinerario y asignarles automáticamente un vendedor.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menú en Contactos (Desactivado para Ferretería Mercado) -->
+        <menuitem id="menu_kamaleon_sale_route_contacts"
+                  name="Rutas de Venta"
+                  action="action_kamaleon_sale_route"
+                  parent="contacts.menu_contacts"
+                  groups="base.group_no_one"
+                  active="False"
+                  sequence="99"/>
+
+    </data>
+</odoo>

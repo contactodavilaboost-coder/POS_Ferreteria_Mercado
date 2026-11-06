@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ══════════════════════════════════════════════════════════════════
+             WIZARD "REGISTRAR PAGO" (account.payment.register)
+             ══════════════════════════════════════════════════════════════════ -->
+        <record id="view_account_payment_register_form_kamaleon" model="ir.ui.view">
+            <field name="name">account.payment.register.form.kamaleon</field>
+            <field name="model">account.payment.register</field>
+            <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+            <field name="arch" type="xml">
+                <!-- Método de Pago antes del diario -->
+                <xpath expr="//field[@name='journal_id']" position="before">
+                    <field name="x_is_pago_movil" invisible="1"/>
+                    <field name="x_payment_method_type" 
+                           widget="selection" 
+                           string="💳 Método de Pago"/>
+                </xpath>
+
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <!-- Datos Bancarios para Pago Móvil y Transferencia -->
+                    <field name="x_origin_bank" 
+                           string="🏦 Banco de Origen"
+                           placeholder="Seleccione el banco emisor" 
+                           invisible="x_payment_method_type not in ('pago_movil', 'transferencia')"
+                           required="x_payment_method_type in ('pago_movil', 'transferencia')"/>
+                    
+                    <!-- Número de Referencia para Pago Móvil, Transferencia y Zelle -->
+                    <field name="x_payment_reference_num" 
+                           string="🔢 N° de Referencia"
+                           placeholder="Ej: 123456 o Código de Transferencia / Zelle" 
+                           invisible="x_payment_method_type not in ('pago_movil', 'transferencia', 'zelle')"
+                           required="x_payment_method_type in ('pago_movil', 'transferencia', 'zelle')"/>
+
+                    <!-- Titular / Email Zelle -->
+                    <field name="x_zelle_holder"
+                           string="👤 Titular / Email Zelle"
+                           placeholder="Nombre del titular o correo Zelle"
+                           invisible="x_payment_method_type != 'zelle'"/>
+
+                    <!-- Titular / Teléfono Emisor -->
+                    <field name="x_payer_holder"
+                           string="📱 Teléfono / Titular Emisor"
+                           placeholder="Teléfono o nombre del pagador"
+                           invisible="x_payment_method_type not in ('pago_movil', 'transferencia')"/>
+
+                    <!-- Pronto Pago 5% -->
+                    <field name="x_early_discount_eligible" invisible="1"/>
+                    <field name="x_early_discount_amount" invisible="1"/>
+                    <field name="x_apply_early_discount" widget="boolean_toggle" invisible="not x_early_discount_eligible"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             FORMULARIO DEL PAGO (account.payment)
+             ══════════════════════════════════════════════════════════════════ -->
+        <record id="view_account_payment_form_kamaleon" model="ir.ui.view">
+            <field name="name">account.payment.form.kamaleon</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='journal_id']" position="before">
+                    <field name="x_is_pago_movil" invisible="1"/>
+                    <field name="x_payment_method_type" 
+                           string="💳 Método de Pago"
+                           readonly="state != 'draft'"/>
+                </xpath>
+
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field name="x_origin_bank" 
+                           string="🏦 Banco de Origen"
+                           invisible="x_payment_method_type not in ('pago_movil', 'transferencia')"
+                           readonly="state != 'draft'"/>
+                    <field name="x_payment_reference_num" 
+                           string="🔢 N° de Referencia"
+                           invisible="x_payment_method_type not in ('pago_movil', 'transferencia', 'zelle')"
+                           readonly="state != 'draft'"/>
+                    <field name="x_zelle_holder" 
+                           string="👤 Titular / Email Zelle"
+                           invisible="x_payment_method_type != 'zelle'"
+                           readonly="state != 'draft'"/>
+                    <field name="x_payer_holder" 
+                           string="📱 Teléfono / Titular Emisor"
+                           invisible="x_payment_method_type not in ('pago_movil', 'transferencia')"
+                           readonly="state != 'draft'"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ══════════════════════════════════════════════════════════════════
+             LISTA DE PAGOS (account.payment) — Columnas de Método y Referencia
+             ══════════════════════════════════════════════════════════════════ -->
+        <record id="view_account_payment_tree_kamaleon" model="ir.ui.view">
+            <field name="name">account.payment.tree.kamaleon</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field name="x_payment_method_type" string="Método de Pago" widget="badge" optional="show"/>
+                    <field name="x_payment_reference_num" string="Referencia" optional="show"/>
+                    <field name="x_origin_bank" string="Banco Emisor" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

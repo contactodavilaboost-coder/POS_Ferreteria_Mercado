@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Categoría de Seguridad: Cotizador Touch -->
+        <record id="category_kamaleon_touch" model="ir.module.category">
+            <field name="name">Cotizador Touch (Vendedores)</field>
+            <field name="description">Grupo de acceso restringido exclusivo para Vendedores en el Cotizador Touch.</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Grupo: Vendedor Cotizador Touch (Acceso Único) -->
+        <record id="group_vendedor_cotizador_touch" model="res.groups">
+            <field name="name">Vendedor Cotizador Touch (Solo Cotizador)</field>
+            <field name="category_id" ref="category_kamaleon_touch"/>
+            <field name="comment">Los usuarios pertenecientes a este grupo SOLO tienen acceso al Cotizador Touch para generar cotizaciones a clientes y consultar productos. Se les ocultan los menús administrativos.</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <!-- Reglas de Registro (ir.rule) para Vendedor Cotizador Touch -->
+        
+        <!-- 1. Regla de Pedidos / Cotizaciones: Solo sus propias cotizaciones -->
+        <record id="rule_sale_order_vendedor_touch" model="ir.rule">
+            <field name="name">Vendedor Touch: Mis Cotizaciones</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="groups" eval="[(4, ref('group_vendedor_cotizador_touch'))]"/>
+            <field name="domain_force">['|', ('user_id', '=', user.id), ('create_uid', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- 2. Regla de Clientes (res.partner): Acceso a Clientes de Venta -->
+        <record id="rule_res_partner_vendedor_touch" model="ir.rule">
+            <field name="name">Vendedor Touch: Clientes Activos</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="groups" eval="[(4, ref('group_vendedor_cotizador_touch'))]"/>
+            <field name="domain_force">[('active', '=', True)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+    </data>
+</odoo>

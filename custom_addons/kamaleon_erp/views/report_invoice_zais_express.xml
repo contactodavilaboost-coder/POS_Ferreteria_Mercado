@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Formato de Papel Personalizado (Margen Superior Reducido a 8mm sin espacio desperdiciado) -->
+        <record id="paperformat_zais_invoice" model="report.paperformat">
+            <field name="name">Zais Express Invoice Paperformat</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">8</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- Asignar el formato de papel ajustado al reporte de factura de Odoo -->
+        <record id="account.account_invoices" model="ir.actions.report">
+            <field name="paperformat_id" ref="paperformat_zais_invoice"/>
+        </record>
+
+        <!-- Plantilla de Factura / Nota de Venta Personalizada Zais Express C.A (Compatible 100% con Wkhtmltopdf) -->
+        <template id="report_invoice_document_zais" inherit_id="account.report_invoice_document" priority="99">
+            <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
+                <attribute name="t-call">web.basic_layout</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('page')]" position="replace">
+                <div class="page zais-doc" style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #1e293b; line-height: 1.35; margin-top: 0px; padding-top: 0px; position: relative; background: #ffffff;">
+                    
+                    <style>
+                        .zais-doc {
+                            font-family: Arial, Helvetica, sans-serif !important;
+                            font-size: 13px !important;
+                            color: #1e293b !important;
+                            background: #ffffff !important;
+                            line-height: 1.35 !important;
+                        }
+                        .zais-doc * {
+                            box-sizing: border-box !important;
+                        }
+                        .zais-row {
+                            width: 100% !important;
+                            clear: both !important;
+                        }
+                        .zais-row::after {
+                            content: "";
+                            display: table;
+                            clear: both;
+                        }
+                        /* Reset absoluto para la tabla de productos */
+                        table.zais-prod-table {
+                            width: 100% !important;
+                            border-collapse: collapse !important;
+                            border: none !important;
+                            border-spacing: 0 !important;
+                            margin-top: 12px !important;
+                            margin-bottom: 12px !important;
+                        }
+                        table.zais-prod-table thead,
+                        table.zais-prod-table tbody,
+                        table.zais-prod-table tr {
+                            border: none !important;
+                        }
+                        table.zais-prod-table th {
+                            background-color: #f1f5f9 !important;
+                            color: #0f172a !important;
+                            font-weight: bold !important;
+                            font-size: 13px !important;
+                            padding: 8px 10px !important;
+                            border: none !important;
+                            border-bottom: 2px solid #334155 !important;
+                        }
+                        table.zais-prod-table td {
+                            padding: 7px 10px !important;
+                            font-size: 12.5px !important;
+                            color: #334155 !important;
+                            border: none !important;
+                            border-bottom: 1px solid #e2e8f0 !important;
+                        }
+                        @media print {
+                            body, .page {
+                                background-color: #ffffff !important;
+                                -webkit-print-color-adjust: exact !important;
+                                print-color-adjust: exact !important;
+                            }
+                        }
+                    </style>
+
+                    <!-- 1. CABECERA PRINCIPAL (Logo | Info Empresa | Info Documento) -->
+                    <div class="zais-row" style="margin-bottom: 16px; border: none !important;">
+                        <!-- Logo (Izquierda) -->
+                        <div style="float: left; width: 30%; border: none !important; padding: 0;">
+                            <img src="/kamaleon_erp/static/src/img/zais_logo.png" style="max-height: 85px; max-width: 170px;"/>
+                        </div>
+                        <!-- Datos Empresa (Centro) -->
+                        <div style="float: left; width: 40%; text-align: center; padding-top: 12px; border: none !important;">
+                            <div style="font-size: 12.5px; color: #334155; line-height: 1.45; font-weight: 600;">
+                                <strong style="color: #0f172a;">Dirección:</strong> <t t-esc="res_company.street or ''"/>
+                            </div>
+                        </div>
+                        <!-- Datos Documento (Derecha) -->
+                        <div style="float: right; width: 30%; text-align: right; border: none !important; padding: 0;">
+                            <div style="font-size: 18px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">
+                                <span t-if="o.move_type == 'out_refund'">Nota de Crédito</span>
+                                <span t-elif="o.move_type == 'in_invoice'">Factura Proveedor</span>
+                                <span t-elif="o.move_type == 'in_refund'">Nota Crédito Prov.</span>
+                                <span t-else="">Nota de Entrega</span>
+                            </div>
+                            <div style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 3px;">
+                                N°: <t t-esc="o.name or o.id"/>
+                            </div>
+                            <div style="font-size: 12px; color: #475569; line-height: 1.35;">
+                                <strong style="color: #0f172a;">Fecha:</strong> <t t-esc="o.invoice_date or ''"/><br/>
+                                <strong style="color: #0f172a;">Hora:</strong> <t t-esc="o.create_date.strftime('%H:%M:%S') if o.create_date else ''"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. DATOS DEL CLIENTE -->
+                    <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; background: #ffffff; clear: both;">
+                        <div style="font-size: 13.5px; font-weight: bold; color: #0f172a; margin-bottom: 8px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px;">
+                            Datos del Cliente
+                        </div>
+                        <div class="zais-row">
+                            <!-- Columna Izquierda -->
+                            <div style="float: left; width: 55%; padding-right: 15px; border: none !important;">
+                                <div style="margin-bottom: 6px;">
+                                    <strong style="color: #0f172a; font-size: 12px;">Nombre:</strong><br/>
+                                    <span style="color: #334155; font-weight: 600; font-size: 13px;"><t t-esc="o.partner_id.name"/></span>
+                                </div>
+                                <div>
+                                    <strong style="color: #0f172a; font-size: 12px;">Dirección:</strong><br/>
+                                    <span style="color: #334155; font-size: 12px;"><t t-esc="o.partner_id.street or o.partner_id.city or 'Coro'"/></span>
+                                </div>
+                            </div>
+                            <!-- Columna Derecha -->
+                            <div style="float: right; width: 45%; border: none !important;">
+                                <div style="margin-bottom: 3px;">
+                                    <span style="font-weight: 700; color: #0f172a; font-size: 12px; display: inline-block; width: 95px;">C.I - RIF:</span>
+                                    <span style="color: #334155; font-size: 12px;"><t t-esc="o.partner_id.vat or o.partner_id.x_rif or 'N/A'"/></span>
+                                </div>
+                                <div style="margin-bottom: 3px;">
+                                    <span style="font-weight: 700; color: #0f172a; font-size: 12px; display: inline-block; width: 95px;">Teléfono:</span>
+                                    <span style="color: #334155; font-size: 12px;"><t t-esc="o.partner_id.phone or o.partner_id.mobile or '0000000000'"/></span>
+                                </div>
+                                <div style="margin-bottom: 3px;">
+                                    <span style="font-weight: 700; color: #0f172a; font-size: 12px; display: inline-block; width: 95px;">Vendedor:</span>
+                                    <span style="color: #334155; font-size: 12px;"><t t-esc="o.user_id.name or 'N/A'"/></span>
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700; color: #0f172a; font-size: 12px; display: inline-block; width: 95px;">Telf Vendedor:</span>
+                                    <span style="color: #334155; font-size: 12px;"><t t-esc="o.user_id.phone or o.user_id.mobile or ''"/></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. TABLA DE PRODUCTOS -->
+                    <div style="width: 100%; clear: both;">
+                        <table class="zais-prod-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 12%; text-align: left;">Cant</th>
+                                    <th style="width: 53%; text-align: left;">Descripción</th>
+                                    <th style="width: 17%; text-align: right;">Precio</th>
+                                    <th style="width: 18%; text-align: right;">SubTotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <tr t-if="line.display_type in ('product', False)">
+                                        <td style="text-align: left;"><t t-esc="str('%.2f' % line.quantity)"/></td>
+                                        <td style="text-align: left;"><t t-esc="line.product_id.name or line.name"/></td>
+                                        <td style="text-align: right;"><t t-esc="str('%.2f' % line.price_unit)"/></td>
+                                        <td style="text-align: right;"><t t-esc="str('%.2f' % line.price_subtotal)"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 4. TOTAL -->
+                    <div class="zais-row" style="margin-bottom: 16px; padding: 6px 0; border-top: 2px solid #0f172a; clear: both;">
+                        <div style="float: right; text-align: right;">
+                            <span style="font-size: 15px; font-weight: 800; color: #0f172a; text-transform: uppercase; margin-right: 35px;">TOTAL</span>
+                            <span style="font-size: 16px; font-weight: 800; color: #0f172a;"><t t-esc="str('%.2f' % o.amount_total)"/></span>
+                        </div>
+                    </div>
+
+                    <!-- 5. FORMAS DE PAGO & PIE DE PÁGINA -->
+                    <div style="clear: both; margin-top: 8px;">
+                        <!-- Recuadro Bancario -->
+                        <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; background: #ffffff;">
+                            <div class="zais-row">
+                                <!-- Transferencia -->
+                                <div style="float: left; width: 48%; padding-right: 10px; border-right: 1px solid #cbd5e1;">
+                                    <div style="font-weight: 700; font-size: 12.5px; color: #0f172a; margin-bottom: 4px;">Transferencia</div>
+                                    <div style="font-size: 11.5px; color: #334155; line-height: 1.45;">
+                                        Banco Nacional de Crédito<br/>
+                                        CI V-30.847.257<br/>
+                                        0191-0102-9421-0006-0156
+                                    </div>
+                                </div>
+                                <!-- Pago Móvil -->
+                                <div style="float: right; width: 48%; padding-left: 10px;">
+                                    <div style="font-weight: 700; font-size: 12.5px; color: #0f172a; margin-bottom: 4px;">Pago Movil</div>
+                                    <div style="font-size: 11.5px; color: #334155; line-height: 1.45;">
+                                        Banco Nacional de Crédito (0191)<br/>
+                                        0412-641-7121<br/>
+                                        C.I: V-30.847.257
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje de Cierre -->
+                        <div style="text-align: center; color: #1e3a8a; font-style: italic; font-size: 11.5px; line-height: 1.5; margin-top: 6px;">
+                            Al recibir este documento el cliente se responsabiliza a cancelar el crédito en un máximo de 15 días.<br/>
+                            <strong style="font-style: normal; color: #0f172a; font-size: 12px;">Puede realizar su pago solo a las CUENTAS BANCARIAS aquí indicadas</strong><br/>
+                            <strong style="font-style: normal; color: #0f172a; font-size: 13.5px;">¡Gracias por su preferencia!</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

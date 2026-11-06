@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Acción de Cliente (OWL Client Action) -->
+        <record id="action_kamaleon_touch_sales" model="ir.actions.client">
+            <field name="name">Cotizador Touch</field>
+            <field name="tag">kamaleon_touch_sales</field>
+            <field name="target">current</field>
+        </record>
+
+        <!-- Acción de Mis Pedidos (Lista nativa de Odoo) -->
+        <record id="action_kamaleon_touch_seller_orders" model="ir.actions.act_window">
+            <field name="name">Mis Pedidos</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('user_id', '=', uid)]</field>
+            <field name="context">{'search_default_my_sale_orders_filter': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No tienes pedidos de venta registrados.
+                </p>
+                <p>
+                    Utiliza el Cotizador Touch para crear nuevas ventas para tus clientes.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menú de aplicación principal (standalone app) - Oculto para Ferretería (solo POS / Tienda) -->
+        <menuitem id="menu_kamaleon_touch_sales_root"
+                  name="Cotizador Touch"
+                  groups="base.group_no_one"
+                  active="False"
+                  sequence="99"/>
+
+        <menuitem id="menu_kamaleon_touch_sales_app"
+                  name="Cotizador"
+                  parent="menu_kamaleon_touch_sales_root"
+                  action="action_kamaleon_touch_sales"
+                  groups="base.group_no_one"
+                  active="False"
+                  sequence="1"/>
+
+        <menuitem id="menu_kamaleon_touch_sales_orders"
+                  name="Mis Pedidos"
+                  parent="menu_kamaleon_touch_sales_root"
+                  action="action_kamaleon_touch_seller_orders"
+                  groups="base.group_no_one"
+                  active="False"
+                  sequence="2"/>
+    </data>
+</odoo>

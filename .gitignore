@@ -1,0 +1,43 @@
+# Odoo data and db directories (if using local bind mounts)
+/db_data/
+/odoo_data/
+
+# Python cache files
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Heavy script files with base64 data
+custom_addons/update_full_catalog_b64.py
+custom_addons/update_white_bg_catalog_b64.py
+
+# Local environments / IDEs / dumps
+.env
+.venv/
+venv/
+ENV/
+.idea/
+.vscode/
+*.dump
+*.tar.gz
+*.zip
+*.log
+
+# OS generated files
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Scratch and temporary directories
+.agents/
+scratch/
+extracted_images/
+odoo-18-docker/
+lt.txt
+
+# Marketing & Personal assets
+*.pdf
+linkedin_banner*.png
+slide*.jpg
+

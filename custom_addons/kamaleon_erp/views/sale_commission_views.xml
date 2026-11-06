@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de Lista (Tree) -->
+        <record id="view_kamaleon_sale_commission_tree" model="ir.ui.view">
+            <field name="name">sale.commission.tree.kamaleon</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <list string="Comisiones de Ventas - Kamaleon ERP" decoration-info="state == 'draft'" decoration-success="state == 'paid'" decoration-muted="state == 'cancelled'" decoration-warning="state == 'approved'">
+                    <field name="name"/>
+                    <field name="salesperson_id" widget="many2one_avatar_user"/>
+                    <field name="invoice_id"/>
+                    <field name="invoice_date"/>
+                    <field name="delivery_date" optional="show" string="Fecha Entrega"/>
+                    <field name="commission_base_date" optional="hide" string="Fecha Base Comisión"/>
+                    <field name="payment_date"/>
+                    <field name="days_to_pay" class="font-weight-bold"/>
+                    <field name="invoice_amount" sum="Total Facturado"/>
+                    <field name="commission_rate" widget="percentage_float"/>
+                    <field name="commission_amount" sum="Total Comisiones"/>
+                    <field name="payout_date" optional="show" string="Fecha Pago Comisión"/>
+                    <field name="currency_id" column_invisible="True"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'paid'" decoration-warning="state == 'approved'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista de Formulario (Form) -->
+        <record id="view_kamaleon_sale_commission_form" model="ir.ui.view">
+            <field name="name">sale.commission.form.kamaleon</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <form string="Comisión de Venta">
+                    <header>
+                        <button name="action_approve" type="object" string="Aprobar" invisible="state != 'draft'"/>
+                        <button name="action_pay" type="object" string="Marcar como Pagada" class="oe_highlight" invisible="state in ('paid', 'cancelled')"/>
+                        <button name="action_draft" type="object" string="Volver a Borrador" invisible="state not in ('approved', 'paid', 'cancelled')"/>
+                        <button name="action_cancel" type="object" string="Cancelar" invisible="state in ('paid', 'cancelled')"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,paid"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Información del Vendedor">
+                                <field name="salesperson_id" readonly="state == 'paid'"/>
+                                <field name="currency_id" invisible="True"/>
+                            </group>
+                            <group string="Información del Cobro Factura">
+                                <field name="invoice_id" readonly="state == 'paid'"/>
+                                <field name="invoice_date" readonly="True"/>
+                                <field name="delivery_date" readonly="True"/>
+                                <field name="commission_base_date" readonly="True"
+                                       help="Fecha desde la que se calculan los días: entrega si existe, factura si no."/>
+                                <field name="payment_date" readonly="state == 'paid'" string="Fecha Cobro Cliente"/>
+                                <field name="days_to_pay" readonly="True"/>
+                            </group>
+                        </group>
+                        <group string="Cálculo y Liquidación de Comisión">
+                            <group>
+                                <field name="invoice_amount" readonly="state == 'paid'"/>
+                                <field name="commission_rate" readonly="state == 'paid'"/>
+                                <field name="payout_date" readonly="state == 'paid'"/>
+                            </group>
+                            <group>
+                                <field name="commission_amount" readonly="True" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de Búsqueda -->
+        <record id="view_kamaleon_sale_commission_search" model="ir.ui.view">
+            <field name="name">sale.commission.search.kamaleon</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Comisiones">
+                    <field name="name"/>
+                    <field name="salesperson_id"/>
+                    <field name="invoice_id"/>
+                    <filter string="Pendientes por Pagar" name="pending" domain="[('state', 'in', ('draft', 'approved'))]"/>
+                    <filter string="Ya Pagadas" name="state_paid" domain="[('state', '=', 'paid')]"/>
+                    <separator/>
+                    <filter string="Borrador" name="state_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Aprobado" name="state_approved" domain="[('state', '=', 'approved')]"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Vendedor" name="group_by_salesperson" context="{'group_by': 'salesperson_id'}"/>
+                        <filter string="Estado" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Fecha Pago Comisión" name="group_by_payout_date" context="{'group_by': 'payout_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción de Servidor para Marcar como Pagadas en Lote -->
+        <record id="action_server_sale_commission_pay" model="ir.actions.server">
+            <field name="name">Marcar como Pagadas</field>
+            <field name="model_id" ref="model_sale_commission"/>
+            <field name="binding_model_id" ref="model_sale_commission"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">records.action_pay()</field>
+        </record>
+
+        <!-- Acción de Ventana -->
+        <record id="action_kamaleon_sale_commission" model="ir.actions.act_window">
+            <field name="name">Comisiones de Ventas</field>
+            <field name="res_model">sale.commission</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_kamaleon_sale_commission_search"/>
+            <field name="context">{'search_default_pending': 1, 'search_default_group_by_salesperson': 1}</field>
+        </record>
+
+        <!-- Menú de Comisiones en Facturación (Barra Superior) -->
+        <menuitem id="menu_kamaleon_sale_commission_top"
+                  name="Comisiones"
+                  parent="account.menu_finance"
+                  action="action_kamaleon_sale_commission"
+                  sequence="25"/>
+
+        <!-- Menú de Comisiones en Facturación -> Clientes -->
+        <menuitem id="menu_kamaleon_sale_commission"
+                  name="Comisiones"
+                  parent="account.menu_finance_receivables"
+                  action="action_kamaleon_sale_commission"
+                  sequence="25"/>
+    </data>
+</odoo>

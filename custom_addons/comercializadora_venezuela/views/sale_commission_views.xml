@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de Lista (Tree) -->
+        <record id="view_sale_commission_tree" model="ir.ui.view">
+            <field name="name">sale.commission.tree</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <list string="Comisiones de Ventas" decoration-info="state == 'draft'" decoration-success="state == 'paid'" decoration-muted="state == 'cancelled'" decoration-warning="state == 'approved'">
+                    <field name="name"/>
+                    <field name="salesperson_id" widget="many2one_avatar_user"/>
+                    <field name="invoice_id"/>
+                    <field name="invoice_date"/>
+                    <field name="payment_date"/>
+                    <field name="days_to_pay" class="font-weight-bold"/>
+                    <field name="invoice_amount" sum="Total Facturado"/>
+                    <field name="commission_rate" widget="percentage_float"/>
+                    <field name="commission_amount" sum="Total Comisiones"/>
+                    <field name="currency_id" column_invisible="True"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'paid'" decoration-warning="state == 'approved'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista de Formulario (Form) -->
+        <record id="view_sale_commission_form" model="ir.ui.view">
+            <field name="name">sale.commission.form</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <form string="Comisión de Venta">
+                    <header>
+                        <button name="action_approve" type="object" string="Aprobar" class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="action_pay" type="object" string="Pagar Comisión" class="oe_highlight" invisible="state != 'approved'"/>
+                        <button name="action_draft" type="object" string="Volver a Borrador" invisible="state not in ('approved', 'cancelled')"/>
+                        <button name="action_cancel" type="object" string="Cancelar" invisible="state in ('paid', 'cancelled')"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,paid"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Información del Vendedor">
+                                <field name="salesperson_id" readonly="state == 'paid'"/>
+                                <field name="currency_id" invisible="True"/>
+                            </group>
+                            <group string="Información del Cobro">
+                                <field name="invoice_id" readonly="state == 'paid'"/>
+                                <field name="invoice_date" readonly="True"/>
+                                <field name="payment_date" readonly="state == 'paid'"/>
+                                <field name="days_to_pay" readonly="True"/>
+                            </group>
+                        </group>
+                        <group string="Cálculo de Comisión">
+                            <group>
+                                <field name="invoice_amount" readonly="state == 'paid'"/>
+                                <field name="commission_rate" readonly="state == 'paid'"/>
+                            </group>
+                            <group>
+                                <field name="commission_amount" readonly="True" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de Búsqueda y Filtros (Search) -->
+        <record id="view_sale_commission_search" model="ir.ui.view">
+            <field name="name">sale.commission.search</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Comisiones">
+                    <field name="name"/>
+                    <field name="salesperson_id"/>
+                    <field name="invoice_id"/>
+                    <filter string="Borrador" name="state_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Aprobado" name="state_approved" domain="[('state', '=', 'approved')]"/>
+                    <filter string="Pagado" name="state_paid" domain="[('state', '=', 'paid')]"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Vendedor" name="group_by_salesperson" context="{'group_by': 'salesperson_id'}"/>
+                        <filter string="Estado" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Fecha de Pago" name="group_by_payment_date" context="{'group_by': 'payment_date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción de Ventana -->
+        <record id="action_sale_commission" model="ir.actions.act_window">
+            <field name="name">Comisiones de Ventas</field>
+            <field name="res_model">sale.commission</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sale_commission_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se han generado comisiones aún.
+                </p>
+                <p>
+                    Las comisiones se generan automáticamente cuando una factura de cliente es pagada en su totalidad.
+                    El porcentaje se calcula según los días transcurridos desde la emisión de la factura.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menú de Comisiones en Ventas -->
+        <menuitem id="menu_sale_commission"
+                  name="Comisiones"
+                  parent="sale.sale_menu_root"
+                  action="action_sale_commission"
+                  sequence="15"/>
+    </data>
+</odoo>

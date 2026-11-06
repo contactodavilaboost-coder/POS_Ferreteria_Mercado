@@ -1,0 +1,60 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: odoo_caddy_proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME:-localhost}
+      - ACME_EMAIL=${ACME_EMAIL:-admin@example.com}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - odoo-network
+    depends_on:
+      - web
+
+  web:
+    image: odoo:18.0
+    container_name: odoo_web_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - HOST=db
+      - USER=${POSTGRES_USER:-odoo}
+      - PASSWORD=${POSTGRES_PASSWORD:-odoo}
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./custom_addons:/mnt/extra-addons
+    command: odoo -c /etc/odoo/odoo.conf
+    networks:
+      - odoo-network
+
+  db:
+    image: postgres:15
+    container_name: odoo_postgres_db
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-odoo}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-odoo}
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+    networks:
+      - odoo-network
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  odoo-network:
+    driver: bridge

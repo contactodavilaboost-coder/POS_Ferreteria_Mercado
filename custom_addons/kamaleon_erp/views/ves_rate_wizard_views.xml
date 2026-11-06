@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista Formulario del Wizard de Tasa del Día BCV -->
+        <record id="view_kamaleon_ves_rate_wizard_form" model="ir.ui.view">
+            <field name="name">kamaleon.ves.rate.wizard.form</field>
+            <field name="model">kamaleon.ves.rate.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Actualizar Tasa del Día BCV">
+                    <sheet>
+                        <div class="oe_title">
+                            <h2>💵 Tasa del Día BCV / VES (Bs/$)</h2>
+                            <p class="text-muted">
+                                Al actualizar esta tasa, se sincronizarán inmediatamente todas las cajas (POS) y se reajustarán los precios en dólares de las Frutas y Hortalizas para mantener su precio en Bolívares intacto.
+                            </p>
+                        </div>
+                        <group>
+                            <group string="Empresa y Fecha">
+                                <field name="company_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="date"/>
+                                <field name="current_rate" widget="monetary" string="Tasa Actual (Bs/$)"/>
+                            </group>
+                            <group string="Nueva Tasa Oficial">
+                                <field name="new_rate" class="oe_inline font-weight-bold" style="font-size: 1.4rem; color: #10b981;"/>
+                                <span class="text-muted fs-6">Bs. por cada Dólar (USD)</span>
+                            </group>
+                        </group>
+                        <group string="Opciones de Sincronización">
+                            <field name="sync_pos"/>
+                            <field name="recalculate_produce"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_apply_rate" 
+                                string="Aplicar Tasa a Cajas y Facturación" 
+                                type="object" 
+                                class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción de Ventana para abrir el Wizard en modo modal -->
+        <record id="action_kamaleon_ves_rate_wizard" model="ir.actions.act_window">
+            <field name="name">Tasa del Día BCV</field>
+            <field name="res_model">kamaleon.ves.rate.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Menú Directo en Facturación (Barra Superior) -->
+        <menuitem id="menu_kamaleon_ves_rate_top"
+                  name="Tasa del Día"
+                  parent="account.menu_finance"
+                  action="action_kamaleon_ves_rate_wizard"
+                  sequence="27"/>
+
+        <!-- Menú en Facturación -> Configuración -->
+        <menuitem id="menu_kamaleon_ves_rate_config"
+                  name="Tasa del Día (BCV)"
+                  parent="account.menu_finance_configuration"
+                  action="action_kamaleon_ves_rate_wizard"
+                  sequence="5"/>
+    </data>
+</odoo>

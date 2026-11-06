@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kamaleon_sale_commission_user,sale.commission,model_sale_commission,base.group_user,1,0,0,0
+access_kamaleon_sale_commission_admin,sale.commission,model_sale_commission,base.group_system,1,1,1,1
+access_kamaleon_touch_sales,kamaleon.touch.sales,model_kamaleon_touch_sales,base.group_user,1,1,1,1
+access_kamaleon_sale_route_user,kamaleon.sale.route,model_kamaleon_sale_route,base.group_user,1,1,1,1
+access_kamaleon_sale_route_admin,kamaleon.sale.route,model_kamaleon_sale_route,base.group_system,1,1,1,1
+access_kamaleon_partner_salesperson_history_user,kamaleon.partner.salesperson.history,model_kamaleon_partner_salesperson_history,base.group_user,1,1,1,1
+access_kamaleon_sales_dashboard_user,kamaleon.sales.dashboard,model_kamaleon_sales_dashboard,base.group_user,1,1,1,1
+access_kamaleon_sales_dashboard_admin,kamaleon.sales.dashboard,model_kamaleon_sales_dashboard,base.group_system,1,1,1,1
+access_kamaleon_ves_rate_wizard_user,kamaleon.ves.rate.wizard,model_kamaleon_ves_rate_wizard,base.group_user,1,1,1,1
+access_kamaleon_ves_rate_wizard_admin,kamaleon.ves.rate.wizard,model_kamaleon_ves_rate_wizard,base.group_system,1,1,1,1
+

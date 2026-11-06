@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_users_form_kamaleon_vendedor" model="ir.ui.view">
+            <field name="name">res.users.form.kamaleon.vendedor</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='action_id']" position="after">
+                    <field name="x_is_vendedor_touch" widget="boolean_toggle"/>
+                    <field name="x_is_cajero_pos" widget="boolean_toggle"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

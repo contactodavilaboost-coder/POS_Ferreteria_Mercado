@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Heredar vista de formulario del producto para agregar opciones de Touch y Precio en Bolívares -->
+        <record id="view_product_template_form_inherit_touch" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.touch</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <!-- Agregar el check dentro de las opciones principales (div name="options") -->
+                <xpath expr="//div[@name='options']" position="inside">
+                    <span class="d-inline-block me-3">
+                        <field name="is_available_in_touch"/>
+                        <label for="is_available_in_touch"/>
+                    </span>
+                    <span class="d-inline-block me-3">
+                        <field name="x_is_price_in_ves"/>
+                        <label for="x_is_price_in_ves" string="Fijar Precio en Bolívares (Frutas y Hortalizas)"/>
+                    </span>
+                    <span class="d-inline-block">
+                        <field name="x_open_price_ves"/>
+                        <label for="x_open_price_ves" string="Monto Abierto en Bs. (Comodín / Mix)"/>
+                    </span>
+                </xpath>
+
+                <!-- Agregar el campo de Precio en Bs. justo después del precio en dólares -->
+                <xpath expr="//field[@name='list_price']" position="after">
+                    <label for="x_price_ves" string="Precio en Bolívares (Bs.)"/>
+                    <div class="o_row">
+                        <field name="x_price_ves" class="oe_inline font-weight-bold" style="font-size: 1.15rem; color: #059669;"/>
+                        <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2 py-1 ms-2" invisible="not x_is_price_in_ves">
+                            🍈 Frutas y Hortalizas (Base en Bs.)
+                        </span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Heredar vista de lista de productos (product.template) para agregar Precio Bs. y valoración -->
+        <record id="view_product_template_tree_inherit_values" model="ir.ui.view">
+            <field name="name">product.template.tree.inherit.values</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='list_price']" position="after">
+                    <field name="x_price_ves" optional="show" string="Precio (Bs.)" class="text-success fw-bold"/>
+                </xpath>
+                <xpath expr="//field[@name='qty_available']" position="after">
+                    <field name="total_cost_value" widget="monetary" sum="Total Costo Inventario" optional="show"/>
+                    <field name="total_sale_value" widget="monetary" sum="Total Venta Inventario" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Heredar vista de lista de variantes de producto (product.product) -->
+        <record id="view_product_product_tree_inherit_values" model="ir.ui.view">
+            <field name="name">product.product.tree.inherit.values</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lst_price']" position="after">
+                    <field name="x_price_ves" optional="show" string="Precio (Bs.)" class="text-success fw-bold"/>
+                </xpath>
+                <xpath expr="//field[@name='qty_available']" position="after">
+                    <field name="total_cost_value" widget="monetary" sum="Total Costo Inventario" optional="show"/>
+                    <field name="total_sale_value" widget="monetary" sum="Total Venta Inventario" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Heredar formulario de categoría de producto para marcar fijación en Bs. -->
+        <record id="view_product_category_form_inherit_ves" model="ir.ui.view">
+            <field name="name">product.category.form.inherit.ves</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="x_price_in_ves"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 1. Heredar vista de lista de Existencias de Inventario (stock.view_stock_quant_tree_inventory_editable) -->
+        <record id="view_stock_quant_tree_inventory_editable_inherit_sale" model="ir.ui.view">
+            <field name="name">stock.quant.tree.inventory.editable.inherit.sale</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='quantity']" position="after">
+                    <field name="sale_price_unit" optional="show"/>
+                    <field name="total_sale_value" widget="monetary" sum="Total Valor Venta" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- 2. Heredar vista de lista editable de Existencias (stock.view_stock_quant_tree_editable) -->
+        <record id="view_stock_quant_tree_inherit_sale_value" model="ir.ui.view">
+            <field name="name">stock.quant.tree.inherit.sale.value</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='inventory_quantity_auto_apply']" position="after">
+                    <field name="sale_price_unit" optional="show"/>
+                    <field name="total_sale_value" widget="monetary" sum="Total Valor Venta" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- 3. Heredar vista de lista simple de Existencias (stock.view_stock_quant_tree) -->
+        <record id="view_stock_quant_tree_simple_inherit_sale_value" model="ir.ui.view">
+            <field name="name">stock.quant.tree.simple.inherit.sale.value</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='quantity']" position="after">
+                    <field name="sale_price_unit" optional="show"/>
+                    <field name="total_sale_value" widget="monetary" sum="Total Valor Venta" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

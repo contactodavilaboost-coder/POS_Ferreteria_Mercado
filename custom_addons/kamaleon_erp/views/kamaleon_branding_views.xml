@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="web_layout_kamaleon" inherit_id="web.layout">
+            <xpath expr="//title" position="replace">
+                <title>Ferretería Mercado</title>
+            </xpath>
+            <xpath expr="//head" position="inside">
+                <link rel="shortcut icon" href="/kamaleon_erp/static/src/img/company_favicon.png" type="image/png"/>
+                <link rel="icon" href="/kamaleon_erp/static/src/img/company_favicon.png" type="image/png"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

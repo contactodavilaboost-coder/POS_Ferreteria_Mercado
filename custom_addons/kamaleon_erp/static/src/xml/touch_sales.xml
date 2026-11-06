@@ -1,0 +1,1090 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="kamaleon_erp.TouchSales">
+        <div class="kt-touch-sales-container">
+
+            <!-- ════════════════════════════════════════
+                 PANTALLA 1: BIENVENIDA / SELECCIÓN DE CLIENTE
+                 ════════════════════════════════════════ -->
+            <t t-if="state.screen === 'welcome'">
+                <div class="kt-welcome-screen">
+                    <!-- Hero Header -->
+                    <div class="kt-welcome-hero">
+                        <div class="kt-welcome-hero-content">
+                            <div class="kt-welcome-badge">
+                                <i class="fa fa-tablet"></i>
+                                <span>POS &amp; Cotizador Touch</span>
+                            </div>
+                            <h1 class="kt-welcome-title">Nueva Cotización</h1>
+                            <p class="kt-welcome-subtitle">Selecciona el cliente para abrir su terminal de venta y cargar productos</p>
+                        </div>
+                        <div class="kt-hero-stats">
+                            <!-- Switch Navegación: Cotizador / Mis Clientes / Mis Pedidos -->
+                            <div class="kt-nav-tabs-pill">
+                                <button class="btn kt-nav-tab active" t-on-click="() => this.switchScreen('welcome')">
+                                    <i class="fa fa-shopping-cart me-1"></i> Cotizador
+                                </button>
+                                <button class="btn kt-nav-tab" t-on-click="() => this.switchScreen('clients')">
+                                    <i class="fa fa-address-book me-1"></i> Mis Clientes
+                                    <span class="badge bg-white text-dark ms-1"><t t-esc="state.partners.length"/></span>
+                                </button>
+                                <button class="btn kt-nav-tab" t-on-click="() => this.switchScreen('orders')">
+                                    <i class="fa fa-list-alt me-1"></i> Mis Pedidos
+                                    <t t-if="state.orders and state.orders.length > 0">
+                                        <span class="badge bg-white text-dark ms-1"><t t-esc="state.orders.length"/></span>
+                                    </t>
+                                </button>
+                            </div>
+                            <div class="kt-stat-pill">
+                                <i class="fa fa-users"></i>
+                                <span><t t-esc="state.partners.length"/> Clientes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Container -->
+                    <div class="kt-welcome-body">
+                        <!-- Search Box & Quick Orders Button -->
+                        <div class="kt-customer-search-wrapper d-flex gap-2 align-items-center">
+                            <div class="kt-customer-search-box flex-grow-1">
+                                <i class="fa fa-search kt-search-icon"></i>
+                                <input type="text"
+                                       class="form-control kt-customer-search-input"
+                                       placeholder="Buscar cliente por nombre, RIF o cédula..."
+                                       t-att-value="state.partnerSearch"
+                                       t-on-input="onPartnerSearchInput"
+                                       autofocus="true"/>
+                                <t t-if="state.partnerSearch">
+                                    <button class="btn kt-search-clear" t-on-click="() => this.state.partnerSearch = ''">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </t>
+                            </div>
+                            <button class="btn btn-outline-success fw-bold d-flex align-items-center gap-2 shadow-sm px-3 text-nowrap rounded-3"
+                                    style="height: 48px; border-width: 2px;"
+                                    t-on-click="() => this.switchScreen('orders')"
+                                    title="Ver Panel de Pedidos Realizados">
+                                <i class="fa fa-list-alt fs-5"></i>
+                                <span class="d-none d-sm-inline">Panel de Pedidos</span>
+                                <span class="badge bg-success text-white"><t t-esc="state.orders ? state.orders.length : 0"/></span>
+                            </button>
+                        </div>
+
+                        <!-- Customer Grid / Cards -->
+                        <div class="kt-customer-grid">
+                            <t t-if="state.loading">
+                                <div class="kt-welcome-loading">
+                                    <div class="spinner-border text-success" role="status"></div>
+                                    <p class="mt-3 text-muted">Cargando lista de clientes...</p>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <t t-if="filteredPartners.length === 0">
+                                    <div class="kt-no-results">
+                                        <div class="kt-no-results-icon"><i class="fa fa-user-times"></i></div>
+                                        <h4>No encontramos a ese cliente</h4>
+                                        <p class="text-muted">Intenta buscar por otro nombre o RIF.</p>
+                                    </div>
+                                </t>
+                                <t t-foreach="filteredPartners" t-as="partner" t-key="partner.id">
+                                    <div class="kt-customer-card"
+                                         t-att-class="{ 'selected': state.selectedPartnerId === partner.id, 'border-danger': partner.x_is_credit_blocked and !partner.x_credit_blocked_override }"
+                                         t-on-click="() => this.selectPartner(partner)">
+                                        
+                                        <div class="kt-customer-card-header">
+                                            <div class="kt-customer-avatar">
+                                                <img t-attf-src="/web/image/res.partner/{{partner.id}}/image_128"
+                                                     onerror="this.src='/web/static/img/avatar.png'"
+                                                     alt="avatar"/>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-1">
+                                                <button class="btn btn-sm kt-btn-view-pill"
+                                                        t-on-click="(ev) => this.viewPartnerDetails(partner, ev)"
+                                                        title="Ver Ficha (Solo Lectura)">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <div class="kt-customer-selection-indicator">
+                                                    <i class="fa fa-check"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="kt-customer-card-body">
+                                            <div class="kt-customer-name" t-esc="partner.name"/>
+                                            <t t-if="partner.x_is_credit_blocked and !partner.x_credit_blocked_override">
+                                                <div class="badge bg-danger text-white mt-1">
+                                                    <i class="fa fa-ban me-1"></i>Bloqueado (>3 días mora)
+                                                </div>
+                                            </t>
+                                            <t t-elif="partner.vat_display">
+                                                <div class="kt-customer-vat-badge">
+                                                    <i class="fa fa-id-card me-1"></i><t t-esc="partner.vat_display"/>
+                                                </div>
+                                            </t>
+                                            <!-- Dirección en tarjeta del cotizador -->
+                                            <t t-if="partner.address and partner.address !== 'Sin dirección registrada'">
+                                                <div class="kt-customer-address-line" t-att-title="partner.address">
+                                                    <i class="fa fa-map-marker text-success me-1"></i><span class="text-truncate" t-esc="partner.address"/>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <div class="kt-customer-card-footer">
+                                            <t t-if="partner.phone_display">
+                                                <span class="kt-customer-info-tag"><i class="fa fa-phone me-1"></i><t t-esc="partner.phone_display"/></span>
+                                            </t>
+                                            <t t-elif="partner.email">
+                                                <span class="kt-customer-info-tag"><i class="fa fa-envelope me-1"></i><t t-esc="partner.email"/></span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="kt-customer-info-tag text-muted">Cliente Activo</span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Floating Action Dock -->
+                    <t t-if="state.selectedPartnerId">
+                        <div class="kt-welcome-dock" t-att-class="{ 'border-danger bg-danger-subtle': state.selectedPartnerBlocked }">
+                            <div class="kt-dock-client-info">
+                                <div class="kt-dock-avatar">
+                                    <img t-attf-src="/web/image/res.partner/{{state.selectedPartnerId}}/image_128"
+                                         onerror="this.src='/web/static/img/avatar.png'"
+                                         alt="avatar"/>
+                                </div>
+                                <div class="kt-dock-text">
+                                    <span class="kt-dock-label">Cliente Seleccionado</span>
+                                    <h4 class="kt-dock-client-name" t-esc="state.selectedPartnerName"/>
+                                    <t t-if="state.selectedPartnerBlocked">
+                                        <div class="badge bg-danger text-white mt-1">
+                                            <i class="fa fa-exclamation-triangle me-1"></i> BLOQUEADO: <t t-esc="state.selectedPartnerBlockedInfo"/>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <div class="kt-dock-actions">
+                                <button class="btn kt-btn-proceed"
+                                        t-att-class="{ 'btn-danger': state.selectedPartnerBlocked }"
+                                        t-on-click="proceedToCatalog">
+                                    <t t-if="state.selectedPartnerBlocked">
+                                        <span>Cliente Bloqueado</span>
+                                        <i class="fa fa-lock ms-2"></i>
+                                    </t>
+                                    <t t-else="">
+                                        <span>Comenzar Cotización</span>
+                                        <i class="fa fa-arrow-right ms-2"></i>
+                                    </t>
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+
+            <!-- ════════════════════════════════════════
+                 PANTALLA 2: CATÁLOGO DE PRODUCTOS
+                 ════════════════════════════════════════ -->
+            <t t-if="state.screen === 'catalog'">
+                <!-- Header bar -->
+                <div class="kt-header-bar">
+                    <button class="btn kt-btn-back" t-on-click="backToWelcome">
+                        <i class="fa fa-arrow-left me-1"></i> Cambiar
+                    </button>
+                    <div class="kt-header-title text-truncate">
+                        <i class="fa fa-user me-1"></i>
+                        <t t-esc="state.selectedPartnerName"/>
+                    </div>
+                    <div class="kt-header-right d-flex align-items-center gap-2">
+                        <!-- Pricelist Selector Dropdown -->
+                        <t t-if="state.pricelists.length > 1">
+                            <select class="form-select form-select-sm border-0 bg-dark text-white fw-bold shadow-sm"
+                                    style="max-width: 180px;"
+                                    t-att-value="state.selectedPricelistId"
+                                    t-on-change="onPricelistChange">
+                                <t t-foreach="state.pricelists" t-as="pl" t-key="pl.id">
+                                    <option t-att-value="pl.id" t-att-selected="pl.id === state.selectedPricelistId">
+                                        🏷️ <t t-esc="pl.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </t>
+                        <t t-else="">
+                            <span class="badge bg-secondary"><i class="fa fa-tag me-1"></i><t t-esc="selectedPricelistName"/></span>
+                        </t>
+
+                        <!-- Quick Orders Button from Catalog -->
+                        <button class="btn btn-outline-light btn-sm fw-bold d-flex align-items-center gap-1 shadow-sm px-2 py-1"
+                                t-on-click="() => this.switchScreen('orders')"
+                                title="Ver Historial de Pedidos">
+                            <i class="fa fa-list-alt"></i>
+                            <span class="d-none d-sm-inline">Pedidos</span>
+                            <span class="badge bg-success text-white ms-1"><t t-esc="state.orders ? state.orders.length : 0"/></span>
+                        </button>
+
+                        <!-- Mobile Cart Toggle Button -->
+                        <button class="btn kt-btn-mobile-cart d-md-none" t-on-click="toggleMobileCart">
+                            <i class="fa fa-shopping-bag me-1"></i>
+                            <span class="badge bg-white text-dark ms-1"><t t-esc="state.cart.length"/></span>
+                        </button>
+                        <!-- Desktop Cart Counter Badge -->
+                        <span class="kt-cart-count-badge d-none d-md-inline-block" t-if="state.cart.length > 0">
+                            <i class="fa fa-shopping-bag me-1"></i><t t-esc="state.cart.length"/> items
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Main body: Catalog + Cart (with Mobile Responsive Class) -->
+                <div class="kt-main-body" t-att-class="{ 'show-mobile-cart': state.showMobileCart }">
+
+                    <!-- Left: Catalog (Product Grid - Full Width on Mobile) -->
+                    <div class="kt-catalog-column">
+                        <!-- Filter bar -->
+                        <div class="kt-filter-bar">
+                            <div class="kt-search-box">
+                                <i class="fa fa-search kt-search-icon"></i>
+                                <input type="text"
+                                       class="form-control kt-search-input"
+                                       placeholder="Buscar por nombre, código o barra..."
+                                       t-att-value="state.searchQuery"
+                                       t-on-input="onSearchInput"/>
+                            </div>
+                            <div class="kt-categories-scroll">
+                                <button class="btn kt-cat-pill"
+                                        t-att-class="{ 'active': state.selectedCategoryId === 'all' }"
+                                        t-on-click="() => this.onCategorySelect('all')">
+                                    Todas
+                                </button>
+                                <t t-foreach="state.categories" t-as="cat" t-key="cat.id">
+                                    <button class="btn kt-cat-pill"
+                                            t-att-class="{ 'active': state.selectedCategoryId === cat.id }"
+                                            t-on-click="() => this.onCategorySelect(cat.id)">
+                                        <t t-esc="cat.name"/>
+                                    </button>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Product Grid -->
+                        <div class="kt-products-grid">
+                            <t t-if="filteredProducts.length === 0">
+                                <div class="kt-empty-products">
+                                    <i class="fa fa-cube fa-3x text-muted mb-2"></i>
+                                    <p class="text-muted">No se encontraron productos.</p>
+                                </div>
+                            </t>
+                            <t t-foreach="filteredProducts" t-as="prod" t-key="prod.id">
+                                <div class="kt-product-card" t-att-class="{ 'in-cart': getProductQty(prod.id) > 0 }">
+                                    <div class="kt-product-img-box">
+                                        <img t-attf-src="/web/image/product.product/{{prod.id}}/image_128"
+                                             alt="Producto"
+                                             class="kt-product-img"
+                                             onerror="this.src='/web/static/img/placeholder.png'"/>
+                                        <t t-if="getProductQty(prod.id) > 0">
+                                            <span class="kt-badge-qty"><t t-esc="getProductQty(prod.id)"/></span>
+                                        </t>
+                                    </div>
+                                    <div class="kt-product-info">
+                                        <div class="kt-product-name" t-esc="prod.display_name"/>
+                                        <div class="kt-product-meta">
+                                            <t t-set="pPrice" t-value="prod.computed_price !== undefined ? prod.computed_price : prod.lst_price"/>
+                                            <t t-if="pPrice &lt; prod.lst_price">
+                                                <span class="kt-product-price text-success fw-bold me-1">$ <t t-esc="pPrice.toFixed(2)"/></span>
+                                                <span class="text-decoration-line-through text-muted small me-1">$ <t t-esc="prod.lst_price.toFixed(2)"/></span>
+                                                <span class="badge bg-success-subtle text-success small">Desc</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="kt-product-price">$ <t t-esc="pPrice.toFixed(2)"/></span>
+                                            </t>
+                                        </div>
+                                        <t t-if="prod.volume_rules and prod.volume_rules.length > 0">
+                                            <div class="mt-1 d-flex flex-wrap gap-1">
+                                                <t t-foreach="prod.volume_rules" t-as="vrule" t-key="vrule.min_qty">
+                                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle" style="font-size: 0.72rem; padding: 2px 5px;">
+                                                        📦 <t t-esc="vrule.min_qty"/>+ u. a $<t t-esc="vrule.price.toFixed(3)"/>
+                                                    </span>
+                                                </t>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <div class="kt-card-actions">
+                                        <t t-if="getProductQty(prod.id) > 0">
+                                            <button class="btn kt-btn-qty-minus" t-on-click="() => this.addToCart(prod, -1)">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                            <span class="kt-qty-val"><t t-esc="getProductQty(prod.id)"/></span>
+                                            <button class="btn kt-btn-qty-plus" t-on-click="() => this.addToCart(prod, 1)">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </t>
+                                        <t t-else="">
+                                            <button class="btn kt-btn-add-cart w-100" t-on-click="() => this.addToCart(prod, 1)">
+                                                <i class="fa fa-plus me-1"></i> Agregar
+                                            </button>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Floating Mobile Cart Bar (visible on mobile when cart has items) -->
+                    <t t-if="state.cart.length > 0 and !state.showMobileCart">
+                        <div class="kt-mobile-floating-cart-bar d-md-none" t-on-click="toggleMobileCart">
+                            <div class="kt-mcart-left">
+                                <span class="kt-mcart-count-badge"><t t-esc="state.cart.length"/></span>
+                                <span class="kt-mcart-label">Ver Resumen</span>
+                            </div>
+                            <div class="kt-mcart-right">
+                                <span class="kt-mcart-total-amount">$ <t t-esc="cartTotal.toFixed(2)"/></span>
+                                <i class="fa fa-chevron-up ms-2"></i>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Right: Cart Sidebar (Fixed Sidebar on Desktop, Full Modal/Sheet on Mobile) -->
+                    <div class="kt-cart-sidebar" t-att-class="{ 'mobile-active': state.showMobileCart }">
+                        <div class="kt-cart-header">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-secondary d-md-none me-2" t-on-click="toggleMobileCart">
+                                    <i class="fa fa-arrow-left"></i>
+                                </button>
+                                <span class="fw-bold"><i class="fa fa-shopping-bag me-2"></i> Resumen de Venta</span>
+                            </div>
+                            <t t-if="state.cart.length > 0">
+                                <button class="btn btn-sm btn-outline-danger" t-on-click="clearCart">
+                                    <i class="fa fa-trash me-1"></i> Vaciar
+                                </button>
+                            </t>
+                        </div>
+
+                        <!-- Confirmed Order Success -->
+                        <t t-if="state.confirmedOrder">
+                            <div class="alert alert-success mx-2 mt-2 rounded-3">
+                                <div class="fw-bold"><i class="fa fa-check-circle me-1"></i> ¡Pedido Confirmado!</div>
+                                <div>Número: <strong t-esc="state.confirmedOrder.order_name"/></div>
+                                <div>Total: <strong>$<t t-esc="state.confirmedOrder.amount_total.toFixed(2)"/></strong></div>
+                                <div class="mt-2 d-flex flex-column gap-1">
+                                    <button class="btn btn-sm btn-success" t-on-click="() => this.switchScreen('orders')">
+                                        <i class="fa fa-list-alt me-1"></i> Ver en Mis Pedidos
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" t-on-click="newOrder">
+                                        <i class="fa fa-plus me-1"></i> Nueva Cotización
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Cart items (scrollable) -->
+                        <div class="kt-cart-items">
+                            <t t-if="state.cart.length === 0 and !state.confirmedOrder">
+                                <div class="kt-empty-cart">
+                                    <i class="fa fa-shopping-basket fa-3x text-muted mb-2"></i>
+                                    <p class="text-muted text-center small">Agrega productos tocando las tarjetas</p>
+                                </div>
+                            </t>
+                            <t t-foreach="state.cart" t-as="item" t-key="item.product.id">
+                                <div class="kt-cart-item">
+                                    <div class="kt-cart-item-details">
+                                        <div class="kt-cart-item-title" t-esc="item.product.display_name"/>
+                                        <div class="kt-cart-item-price">$ <t t-esc="item.price.toFixed(2)"/> / u.</div>
+                                    </div>
+                                    <div class="kt-cart-item-controls">
+                                        <button class="btn kt-cart-btn-sm" t-on-click="() => this.addToCart(item.product, -1)">−</button>
+                                        <input type="number"
+                                               class="form-control kt-cart-qty-input"
+                                               t-att-value="item.qty"
+                                               t-on-change="(ev) => this.updateCartQty(item.product.id, ev.target.value)"/>
+                                        <button class="btn kt-cart-btn-sm" t-on-click="() => this.addToCart(item.product, 1)">+</button>
+                                    </div>
+                                    <div class="kt-cart-item-subtotal">$ <t t-esc="(item.qty * item.price).toFixed(2)"/></div>
+                                    <button class="btn kt-cart-btn-del" t-on-click="() => this.removeFromCart(item.product.id)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- Cart Footer -->
+                        <div class="kt-cart-footer" t-if="state.cart.length > 0">
+                            <!-- Comentario / Observación del Pedido -->
+                            <div class="kt-cart-note-box mb-3 text-start">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <label class="form-label small text-muted mb-0 fw-bold">
+                                        <i class="fa fa-commenting-o text-success me-1"></i> Comentario del Pedido:
+                                    </label>
+                                    <t t-if="state.orderNote">
+                                        <button class="btn btn-link text-danger p-0 text-decoration-none small" style="font-size: 0.75rem;" t-on-click="() => this.state.orderNote = ''">
+                                            <i class="fa fa-times me-1"></i> Borrar
+                                        </button>
+                                    </t>
+                                </div>
+                                <textarea class="form-control form-control-sm"
+                                          rows="2"
+                                          placeholder="Ej: Entregar en la tarde, pago acordado en efectivo, etc..."
+                                          style="resize: none; font-size: 0.82rem; border-radius: 8px; border-color: #cbd5e1;"
+                                          t-att-value="state.orderNote"
+                                          t-on-input="onOrderNoteInput"></textarea>
+                            </div>
+
+                            <div class="kt-total-row">
+                                <span>TOTAL</span>
+                                <span class="kt-total-amount">$ <t t-esc="cartTotal.toFixed(2)"/></span>
+                            </div>
+                            <button class="btn kt-btn-confirm"
+                                    t-att-disabled="state.confirming"
+                                    t-on-click="confirmOrder">
+                                <t t-if="state.confirming">
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span> Procesando...
+                                </t>
+                                <t t-else="">
+                                    <i class="fa fa-check-circle me-2"></i> CONFIRMAR VENTA
+                                </t>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ════════════════════════════════════════
+                 PANTALLA 3: HISTORIAL DE MIS PEDIDOS
+                 ════════════════════════════════════════ -->
+            <t t-if="state.screen === 'orders'">
+                <div class="kt-orders-screen">
+                    <!-- Hero Header -->
+                    <div class="kt-welcome-hero">
+                        <div class="kt-welcome-hero-content">
+                            <div class="kt-welcome-badge">
+                                <i class="fa fa-list-alt"></i>
+                                <span>Gestión de Ventas</span>
+                            </div>
+                            <h1 class="kt-welcome-title">Mis Pedidos</h1>
+                            <p class="kt-welcome-subtitle">Consulta el estado de facturación y detalle de tus ventas generadas</p>
+                        </div>
+                        <div class="kt-hero-stats">
+                            <!-- Switch Navegación: Cotizador / Mis Clientes / Mis Pedidos -->
+                            <div class="kt-nav-tabs-pill">
+                                <button class="btn kt-nav-tab" t-on-click="() => this.switchScreen('welcome')">
+                                    <i class="fa fa-shopping-cart me-1"></i> Cotizador
+                                </button>
+                                <button class="btn kt-nav-tab" t-on-click="() => this.switchScreen('clients')">
+                                    <i class="fa fa-address-book me-1"></i> Mis Clientes
+                                    <span class="badge bg-white text-dark ms-1"><t t-esc="state.partners.length"/></span>
+                                </button>
+                                <button class="btn kt-nav-tab active" t-on-click="() => this.switchScreen('orders')">
+                                    <i class="fa fa-list-alt me-1"></i> Mis Pedidos
+                                    <t t-if="state.orders and state.orders.length > 0">
+                                        <span class="badge bg-white text-dark ms-1"><t t-esc="state.orders.length"/></span>
+                                    </t>
+                                </button>
+                            </div>
+                            <button class="btn kt-btn-refresh-orders" t-on-click="loadSellerOrders">
+                                <i class="fa fa-refresh me-1" t-att-class="{ 'fa-spin': state.ordersLoading }"></i> Actualizar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Main Container -->
+                    <div class="kt-orders-body">
+                        <!-- Search & Filter Controls -->
+                        <div class="kt-orders-controls">
+                            <!-- Search Input -->
+                            <div class="kt-orders-search-box">
+                                <i class="fa fa-search kt-search-icon"></i>
+                                <input type="text"
+                                       class="form-control kt-orders-search-input"
+                                       placeholder="Buscar por N° pedido, cliente, RIF o factura..."
+                                       t-att-value="state.orderSearch"
+                                       t-on-input="onOrderSearchInput"/>
+                                <t t-if="state.orderSearch">
+                                    <button class="btn kt-search-clear" t-on-click="() => this.state.orderSearch = ''">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </t>
+                            </div>
+
+                            <!-- Status Filter Chips -->
+                            <div class="kt-orders-filter-chips">
+                                <button class="btn kt-filter-chip"
+                                        t-att-class="{ 'active': state.orderFilter === 'all' }"
+                                        t-on-click="() => this.setOrderFilter('all')">
+                                    <span>Todos</span>
+                                    <span class="kt-chip-badge"><t t-esc="getOrderStatusCount('all')"/></span>
+                                </button>
+                                <button class="btn kt-filter-chip chip-warning"
+                                        t-att-class="{ 'active': state.orderFilter === 'to_invoice' }"
+                                        t-on-click="() => this.setOrderFilter('to_invoice')">
+                                    <i class="fa fa-clock-o me-1"></i>
+                                    <span>Por Facturar</span>
+                                    <span class="kt-chip-badge"><t t-esc="getOrderStatusCount('to_invoice')"/></span>
+                                </button>
+                                <button class="btn kt-filter-chip chip-success"
+                                        t-att-class="{ 'active': state.orderFilter === 'invoiced' }"
+                                        t-on-click="() => this.setOrderFilter('invoiced')">
+                                    <i class="fa fa-check-circle me-1"></i>
+                                    <span>Facturados</span>
+                                    <span class="kt-chip-badge"><t t-esc="getOrderStatusCount('invoiced')"/></span>
+                                </button>
+                                <button class="btn kt-filter-chip chip-danger"
+                                        t-att-class="{ 'active': state.orderFilter === 'cancel' }"
+                                        t-on-click="() => this.setOrderFilter('cancel')">
+                                    <i class="fa fa-ban me-1"></i>
+                                    <span>Cancelados</span>
+                                    <span class="kt-chip-badge"><t t-esc="getOrderStatusCount('cancel')"/></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Orders List / Grid -->
+                        <div class="kt-orders-list-wrapper">
+                            <t t-if="state.ordersLoading">
+                                <div class="kt-orders-loading">
+                                    <div class="spinner-border text-success" role="status"></div>
+                                    <p class="mt-3 text-muted">Consultando tus pedidos...</p>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <t t-if="filteredOrders.length === 0">
+                                    <div class="kt-no-results">
+                                        <div class="kt-no-results-icon"><i class="fa fa-folder-open-o"></i></div>
+                                        <h4>No hay pedidos que mostrar</h4>
+                                        <p class="text-muted">No se encontraron pedidos con el filtro actual.</p>
+                                        <button class="btn btn-outline-success mt-2" t-on-click="() => this.switchScreen('welcome')">
+                                            <i class="fa fa-plus me-1"></i> Crear Nueva Cotización
+                                        </button>
+                                    </div>
+                                </t>
+                                <div class="kt-orders-grid">
+                                    <t t-foreach="filteredOrders" t-as="order" t-key="order.id">
+                                        <div class="kt-order-card" t-att-class="'border-status-' + order.calc_status">
+                                            <!-- Card Header -->
+                                            <div class="kt-order-card-header">
+                                                <div class="kt-order-ref-group">
+                                                    <span class="kt-order-name" t-esc="order.name"/>
+                                                    <span class="kt-order-date">
+                                                        <i class="fa fa-calendar-o me-1"></i><t t-esc="order.date_order"/>
+                                                    </span>
+                                                </div>
+                                                <div class="kt-order-status-badge">
+                                                    <t t-if="order.calc_status === 'invoiced'">
+                                                        <span class="badge bg-success-subtle text-success border border-success-subtle kt-status-pill">
+                                                            <i class="fa fa-check-circle me-1"></i> Facturado
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="order.calc_status === 'to_invoice'">
+                                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle kt-status-pill">
+                                                            <i class="fa fa-clock-o me-1"></i> Por Facturar
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="order.calc_status === 'cancel'">
+                                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle kt-status-pill">
+                                                            <i class="fa fa-times-circle me-1"></i> Cancelado
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="order.calc_status === 'draft'">
+                                                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle kt-status-pill">
+                                                            <i class="fa fa-file-text-o me-1"></i> Cotización
+                                                        </span>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle kt-status-pill">
+                                                            <t t-esc="order.calc_status_label"/>
+                                                        </span>
+                                                    </t>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card Customer & Amount -->
+                                            <div class="kt-order-card-body">
+                                                <div class="kt-order-customer-info">
+                                                    <div class="kt-order-customer-name">
+                                                        <i class="fa fa-user-circle me-1 text-success"></i>
+                                                        <span class="fw-bold" t-esc="order.partner_name"/>
+                                                    </div>
+                                                    <t t-if="order.partner_vat">
+                                                        <div class="kt-order-customer-vat text-muted small">
+                                                            <i class="fa fa-id-card-o me-1"></i><t t-esc="order.partner_vat"/>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                                <div class="kt-order-total-box">
+                                                    <span class="kt-total-label">Monto Total</span>
+                                                    <span class="kt-total-val">$ <t t-esc="order.amount_total.toFixed(2)"/></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Order Comment / Note (if any) -->
+                                            <t t-if="order.note">
+                                                <div class="kt-order-note-display px-3 py-2 bg-light border-top small">
+                                                    <i class="fa fa-commenting-o text-success me-1"></i>
+                                                    <strong class="text-dark">Comentario:</strong> <span class="text-secondary ms-1" t-esc="order.note"/>
+                                                </div>
+                                            </t>
+
+                                            <!-- Invoices Details (if any) -->
+                                            <t t-if="order.invoices and order.invoices.length > 0">
+                                                <div class="kt-order-invoices-section">
+                                                    <div class="kt-invoices-title">
+                                                        <i class="fa fa-file-text me-1 text-primary"></i> Factura(s) Emitida(s):
+                                                    </div>
+                                                    <div class="kt-invoices-chips">
+                                                        <t t-foreach="order.invoices" t-as="inv" t-key="inv.id">
+                                                            <div class="kt-invoice-chip">
+                                                                <span class="fw-bold text-dark" t-esc="inv.name"/>
+                                                                <t t-if="inv.invoice_date">
+                                                                    <span class="text-muted small ms-1">(<t t-esc="inv.invoice_date"/>)</span>
+                                                                </t>
+                                                                <span class="badge ms-1"
+                                                                      t-att-class="{
+                                                                          'bg-success text-white': inv.payment_state === 'paid',
+                                                                          'bg-warning text-dark': inv.payment_state === 'in_payment' or inv.payment_state === 'partial',
+                                                                          'bg-danger text-white': inv.payment_state === 'not_paid'
+                                                                      }">
+                                                                    <t t-esc="inv.payment_state_label"/>
+                                                                </span>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </t>
+
+                                            <!-- Accordion Toggle Button for Lines -->
+                                            <div class="kt-order-card-actions">
+                                                <button class="btn btn-sm kt-btn-toggle-details" t-on-click="() => this.toggleOrderDetails(order.id)">
+                                                    <t t-if="state.expandedOrderId === order.id">
+                                                        <i class="fa fa-chevron-up me-1"></i> Ocultar Productos
+                                                    </t>
+                                                    <t t-else="">
+                                                        <i class="fa fa-chevron-down me-1"></i> Ver Productos (<t t-esc="order.lines.length"/>)
+                                                    </t>
+                                                </button>
+                                                <button class="btn btn-sm kt-btn-view-odoo" t-on-click="() => this.openOrderView(order.id)" title="Abrir en Odoo">
+                                                    <i class="fa fa-external-link me-1"></i> Detalle
+                                                </button>
+                                            </div>
+
+                                            <!-- Expanded Lines Details -->
+                                            <t t-if="state.expandedOrderId === order.id">
+                                                <div class="kt-order-expanded-details">
+                                                    <table class="table table-sm table-striped mb-0 kt-details-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Producto</th>
+                                                                <th class="text-center">Cant.</th>
+                                                                <th class="text-end">Precio U.</th>
+                                                                <th class="text-end">Subtotal</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <t t-foreach="order.lines" t-as="line" t-key="line.id">
+                                                                <tr>
+                                                                    <td class="kt-line-prod-name" t-esc="line.product_name"/>
+                                                                    <td class="text-center fw-bold" t-esc="line.qty"/>
+                                                                    <td class="text-end text-muted">$ <t t-esc="line.price_unit.toFixed(2)"/></td>
+                                                                    <td class="text-end fw-bold text-success">$ <t t-esc="line.price_subtotal.toFixed(2)"/></td>
+                                                                </tr>
+                                                            </t>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </t>
+
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ════════════════════════════════════════
+                 PANTALLA 4: DIRECTORIO DE MIS CLIENTES (SOLO VISTA)
+                 ════════════════════════════════════════ -->
+            <t t-if="state.screen === 'clients'">
+                <div class="kt-clients-screen">
+                    <!-- Hero Header -->
+                    <div class="kt-welcome-hero">
+                        <div class="kt-welcome-hero-content">
+                            <div class="kt-welcome-badge">
+                                <i class="fa fa-address-book"></i>
+                                <span>Directorio Comercial — Solo Vista</span>
+                            </div>
+                            <h1 class="kt-welcome-title">Mis Clientes Asignados</h1>
+                            <p class="kt-welcome-subtitle">Consulta los datos de contacto, ubicación y condiciones comerciales de tus clientes</p>
+                        </div>
+                        <div class="kt-hero-stats">
+                            <div class="kt-nav-tabs-pill">
+                                <button class="btn kt-nav-tab" t-on-click="() => this.switchScreen('welcome')">
+                                    <i class="fa fa-shopping-cart me-1"></i> Cotizador
+                                </button>
+                                <button class="btn kt-nav-tab active" t-on-click="() => this.switchScreen('clients')">
+                                    <i class="fa fa-address-book me-1"></i> Mis Clientes
+                                    <span class="badge bg-white text-dark ms-1"><t t-esc="state.partners.length"/></span>
+                                </button>
+                                <button class="btn kt-nav-tab" t-on-click="() => this.switchScreen('orders')">
+                                    <i class="fa fa-list-alt me-1"></i> Mis Pedidos
+                                    <t t-if="state.orders and state.orders.length > 0">
+                                        <span class="badge bg-white text-dark ms-1"><t t-esc="state.orders.length"/></span>
+                                    </t>
+                                </button>
+                            </div>
+                            <div class="kt-stat-pill">
+                                <i class="fa fa-lock"></i>
+                                <span>Solo Lectura</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Container -->
+                    <div class="kt-clients-body">
+                        <!-- Search & Filter Controls -->
+                        <div class="kt-clients-controls">
+                            <!-- Search Input -->
+                            <div class="kt-clients-search-box">
+                                <i class="fa fa-search kt-search-icon"></i>
+                                <input type="text"
+                                       class="form-control kt-clients-search-input"
+                                       placeholder="Buscar por nombre, RIF, teléfono, dirección o ruta..."
+                                       t-att-value="state.clientSearch"
+                                       t-on-input="onClientSearchInput"/>
+                                <t t-if="state.clientSearch">
+                                    <button class="btn kt-search-clear" t-on-click="() => this.state.clientSearch = ''">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </t>
+                            </div>
+
+                            <!-- Filter Chips -->
+                            <div class="kt-clients-filter-chips">
+                                <button class="btn kt-filter-chip"
+                                        t-att-class="{ 'active': state.clientFilter === 'all' }"
+                                        t-on-click="() => this.setClientFilter('all')">
+                                    <span>Todos</span>
+                                    <span class="kt-chip-badge"><t t-esc="getClientFilterCount('all')"/></span>
+                                </button>
+                                <button class="btn kt-filter-chip chip-success"
+                                        t-att-class="{ 'active': state.clientFilter === 'credit_ok' }"
+                                        t-on-click="() => this.setClientFilter('credit_ok')">
+                                    <i class="fa fa-check-circle me-1"></i>
+                                    <span>Al Día</span>
+                                    <span class="kt-chip-badge"><t t-esc="getClientFilterCount('credit_ok')"/></span>
+                                </button>
+                                <button class="btn kt-filter-chip chip-primary"
+                                        t-att-class="{ 'active': state.clientFilter === 'has_phone' }"
+                                        t-on-click="() => this.setClientFilter('has_phone')">
+                                    <i class="fa fa-phone me-1"></i>
+                                    <span>Con Teléfono</span>
+                                    <span class="kt-chip-badge"><t t-esc="getClientFilterCount('has_phone')"/></span>
+                                </button>
+                                <button class="btn kt-filter-chip chip-danger"
+                                        t-att-class="{ 'active': state.clientFilter === 'credit_blocked' }"
+                                        t-on-click="() => this.setClientFilter('credit_blocked')">
+                                    <i class="fa fa-ban me-1"></i>
+                                    <span>Bloqueados Mora</span>
+                                    <span class="kt-chip-badge"><t t-esc="getClientFilterCount('credit_blocked')"/></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Clients Directory Grid -->
+                        <div class="kt-clients-list-wrapper">
+                            <t t-if="filteredClients.length === 0">
+                                <div class="kt-no-results">
+                                    <div class="kt-no-results-icon"><i class="fa fa-user-times"></i></div>
+                                    <h4>No se encontraron clientes</h4>
+                                    <p class="text-muted">Intenta con otro término de búsqueda o cambia el filtro.</p>
+                                </div>
+                            </t>
+                            <div class="kt-directory-grid">
+                                <t t-foreach="filteredClients" t-as="client" t-key="client.id">
+                                    <div class="kt-directory-card">
+                                        <!-- Card Top Header -->
+                                        <div class="kt-dcard-header">
+                                            <div class="kt-dcard-avatar-wrapper">
+                                                <img class="kt-dcard-avatar"
+                                                     t-attf-src="/web/image/res.partner/{{client.id}}/image_128"
+                                                     onerror="this.src='/web/static/img/avatar.png'"
+                                                     alt="avatar"/>
+                                                <t t-if="client.x_is_credit_blocked and !client.x_credit_blocked_override">
+                                                    <span class="kt-dcard-status-dot bg-danger" title="Bloqueado por mora"></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="kt-dcard-status-dot bg-success" title="Cliente al día"></span>
+                                                </t>
+                                            </div>
+                                            <div class="kt-dcard-header-meta">
+                                                <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle kt-readonly-tag">
+                                                    <i class="fa fa-eye me-1"></i> Solo Vista
+                                                </span>
+                                                <t t-if="client.x_is_credit_blocked and !client.x_credit_blocked_override">
+                                                    <span class="badge bg-danger text-white">Bloqueado (>3d)</span>
+                                                </t>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card Identity -->
+                                        <div class="kt-dcard-identity">
+                                            <h4 class="kt-dcard-name" t-esc="client.name" t-att-title="client.name"/>
+                                            <t t-if="client.vat_display">
+                                                <div class="kt-dcard-vat">
+                                                    <i class="fa fa-id-card-o text-muted me-1"></i>
+                                                    <span t-esc="client.vat_display"/>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <!-- Card Details (Dirección y Teléfono requeridos explícitamente) -->
+                                        <div class="kt-dcard-details">
+                                            <!-- Dirección -->
+                                            <div class="kt-dcard-row">
+                                                <div class="kt-dcard-icon bg-emerald-subtle text-success">
+                                                    <i class="fa fa-map-marker"></i>
+                                                </div>
+                                                <div class="kt-dcard-row-content">
+                                                    <span class="kt-dcard-row-label">Dirección</span>
+                                                    <span class="kt-dcard-row-value kt-address-clamp" t-esc="client.address" t-att-title="client.address"/>
+                                                </div>
+                                            </div>
+
+                                            <!-- Teléfono -->
+                                            <div class="kt-dcard-row">
+                                                <div class="kt-dcard-icon bg-blue-subtle text-primary">
+                                                    <i class="fa fa-phone"></i>
+                                                </div>
+                                                <div class="kt-dcard-row-content">
+                                                    <span class="kt-dcard-row-label">Teléfono</span>
+                                                    <t t-if="client.phone or client.mobile">
+                                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                            <a t-attf-href="tel:{{client.phone || client.mobile}}" class="kt-dcard-phone-link fw-bold text-dark text-decoration-none">
+                                                                <t t-esc="client.phone || client.mobile"/>
+                                                            </a>
+                                                            <t t-if="client.mobile">
+                                                                <a t-attf-href="https://wa.me/{{client.mobile.replace('+', '').replace(' ', '').replace('-', '')}}"
+                                                                   target="_blank"
+                                                                   class="badge bg-success text-white text-decoration-none py-1 px-2"
+                                                                   title="Enviar WhatsApp">
+                                                                    <i class="fa fa-whatsapp me-1"></i> WhatsApp
+                                                                </a>
+                                                            </t>
+                                                        </div>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="text-muted small">No registrado</span>
+                                                    </t>
+                                                </div>
+                                            </div>
+
+                                            <!-- Ruta / Zona si existe -->
+                                            <t t-if="client.route_name">
+                                                <div class="kt-dcard-row">
+                                                    <div class="kt-dcard-icon bg-purple-subtle text-purple">
+                                                        <i class="fa fa-road"></i>
+                                                    </div>
+                                                    <div class="kt-dcard-row-content">
+                                                        <span class="kt-dcard-row-label">Ruta de Venta</span>
+                                                        <span class="kt-dcard-row-value text-dark fw-semibold" t-esc="client.route_name"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <!-- Card Footer Actions (SOLO VISTA + Botón para cotizar) -->
+                                        <div class="kt-dcard-actions">
+                                            <button class="btn btn-sm btn-outline-secondary kt-btn-view-card flex-grow-1"
+                                                    t-on-click="() => this.viewPartnerDetails(client)">
+                                                <i class="fa fa-file-text-o me-1"></i> Ver Ficha
+                                            </button>
+                                            <button class="btn btn-sm btn-success kt-btn-quote-card flex-grow-1"
+                                                    t-on-click="() => this.startQuotationForPartner(client)">
+                                                <i class="fa fa-shopping-cart me-1"></i> Cotizar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ════════════════════════════════════════
+                 MODAL FICHA DEL CLIENTE (SOLO VISTA)
+                 ════════════════════════════════════════ -->
+            <t t-if="state.viewingPartner">
+                <div class="kt-modal-backdrop" t-on-click="closePartnerDetails">
+                    <div class="kt-partner-modal" t-on-click="(ev) => ev.stopPropagation()">
+                        <!-- Modal Header -->
+                        <div class="kt-pmodal-header">
+                            <div class="kt-pmodal-header-profile">
+                                <img class="kt-pmodal-avatar"
+                                     t-attf-src="/web/image/res.partner/{{state.viewingPartner.id}}/image_256"
+                                     onerror="this.src='/web/static/img/avatar.png'"
+                                     alt="avatar"/>
+                                <div class="kt-pmodal-title-box">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                        <span class="badge bg-secondary text-white py-1 px-2">
+                                            <i class="fa fa-eye me-1"></i> FICHA SOLO LECTURA
+                                        </span>
+                                        <t t-if="state.viewingPartner.x_is_credit_blocked and !state.viewingPartner.x_credit_blocked_override">
+                                            <span class="badge bg-danger text-white py-1 px-2">
+                                                <i class="fa fa-ban me-1"></i> Crédito Bloqueado
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge bg-success text-white py-1 px-2">
+                                                <i class="fa fa-check-circle me-1"></i> Crédito Habilitado
+                                            </span>
+                                        </t>
+                                    </div>
+                                    <h3 class="kt-pmodal-name" t-esc="state.viewingPartner.name"/>
+                                    <t t-if="state.viewingPartner.vat_display">
+                                        <span class="text-white-50 small">
+                                            <i class="fa fa-id-card-o me-1"></i> <t t-esc="state.viewingPartner.vat_display"/>
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+                            <button class="btn kt-pmodal-close" t-on-click="closePartnerDetails" title="Cerrar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+
+                        <!-- Read-only Security Banner -->
+                        <div class="kt-pmodal-notice">
+                            <i class="fa fa-lock text-emerald fs-5"></i>
+                            <div>
+                                <strong>Modo de Consulta Protegido:</strong> Los datos de este cliente son de solo lectura para el vendedor y no pueden ser modificados desde este módulo.
+                            </div>
+                        </div>
+
+                        <!-- Modal Body: Data Grid -->
+                        <div class="kt-pmodal-body">
+                            <!-- Alert if credit blocked -->
+                            <t t-if="state.viewingPartner.x_is_credit_blocked and !state.viewingPartner.x_credit_blocked_override">
+                                <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 py-2 px-3 small border-0 rounded-3">
+                                    <i class="fa fa-exclamation-triangle fs-5 flex-shrink-0"></i>
+                                    <div>
+                                        <strong>Bloqueado por Factura Vencida:</strong> <t t-esc="state.viewingPartner.x_blocked_invoice_info || 'Posee más de 3 días de atraso en cancelación de facturas'"/>.
+                                    </div>
+                                </div>
+                            </t>
+
+                            <div class="kt-pmodal-grid">
+                                <!-- Dirección Completa -->
+                                <div class="kt-pmodal-item full-width">
+                                    <div class="kt-pmodal-item-icon bg-emerald-subtle text-success">
+                                        <i class="fa fa-map-marker"></i>
+                                    </div>
+                                    <div class="kt-pmodal-item-content">
+                                        <span class="kt-pmodal-label">Dirección Fiscal / Despacho</span>
+                                        <span class="kt-pmodal-value fw-semibold text-dark" t-esc="state.viewingPartner.address"/>
+                                    </div>
+                                </div>
+
+                                <!-- Teléfono Principal -->
+                                <div class="kt-pmodal-item">
+                                    <div class="kt-pmodal-item-icon bg-blue-subtle text-primary">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <div class="kt-pmodal-item-content">
+                                        <span class="kt-pmodal-label">Teléfono Fijo / Principal</span>
+                                        <t t-if="state.viewingPartner.phone">
+                                            <a t-attf-href="tel:{{state.viewingPartner.phone}}" class="kt-pmodal-link">
+                                                <t t-esc="state.viewingPartner.phone"/> <i class="fa fa-phone ms-1 small"></i>
+                                            </a>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-muted small">No registrado</span>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Móvil / WhatsApp -->
+                                <div class="kt-pmodal-item">
+                                    <div class="kt-pmodal-item-icon bg-success-subtle text-success">
+                                        <i class="fa fa-whatsapp"></i>
+                                    </div>
+                                    <div class="kt-pmodal-item-content">
+                                        <span class="kt-pmodal-label">Teléfono Celular / WhatsApp</span>
+                                        <t t-if="state.viewingPartner.mobile">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <a t-attf-href="tel:{{state.viewingPartner.mobile}}" class="kt-pmodal-link">
+                                                    <t t-esc="state.viewingPartner.mobile"/>
+                                                </a>
+                                                <a t-attf-href="https://wa.me/{{state.viewingPartner.mobile.replace('+', '').replace(' ', '').replace('-', '')}}"
+                                                   target="_blank"
+                                                   class="btn btn-sm btn-success py-0 px-2 small">
+                                                    <i class="fa fa-whatsapp me-1"></i> Abrir Chat
+                                                </a>
+                                            </div>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-muted small">No registrado</span>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Correo Electrónico -->
+                                <div class="kt-pmodal-item">
+                                    <div class="kt-pmodal-item-icon bg-warning-subtle text-warning">
+                                        <i class="fa fa-envelope"></i>
+                                    </div>
+                                    <div class="kt-pmodal-item-content">
+                                        <span class="kt-pmodal-label">Correo Electrónico</span>
+                                        <t t-if="state.viewingPartner.email">
+                                            <a t-attf-href="mailto:{{state.viewingPartner.email}}" class="kt-pmodal-link text-truncate">
+                                                <t t-esc="state.viewingPartner.email"/>
+                                            </a>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-muted small">No registrado</span>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Ruta Comercial -->
+                                <div class="kt-pmodal-item">
+                                    <div class="kt-pmodal-item-icon bg-purple-subtle text-purple">
+                                        <i class="fa fa-road"></i>
+                                    </div>
+                                    <div class="kt-pmodal-item-content">
+                                        <span class="kt-pmodal-label">Ruta Asignada</span>
+                                        <span class="kt-pmodal-value fw-semibold text-dark" t-esc="state.viewingPartner.route_name || 'Sin ruta fija'"/>
+                                    </div>
+                                </div>
+
+                                <!-- Lista de Precios -->
+                                <div class="kt-pmodal-item">
+                                    <div class="kt-pmodal-item-icon bg-secondary-subtle text-secondary">
+                                        <i class="fa fa-tag"></i>
+                                    </div>
+                                    <div class="kt-pmodal-item-content">
+                                        <span class="kt-pmodal-label">Lista de Precios</span>
+                                        <span class="kt-pmodal-value fw-semibold text-dark" t-esc="state.viewingPartner.pricelist_name || 'Lista Estándar'"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="kt-pmodal-footer">
+                            <button class="btn btn-secondary px-4 fw-bold rounded-3" t-on-click="closePartnerDetails">
+                                Cerrar
+                            </button>
+                            <button class="btn btn-success px-4 fw-bold rounded-3 d-flex align-items-center gap-2"
+                                    t-on-click="() => this.startQuotationForPartner(state.viewingPartner)">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Iniciar Cotización con este Cliente</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+        </div>
+    </t>
+</templates>

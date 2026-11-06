@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- Botón de Atajos de Teclado en la barra superior (Navbar) -->
+    <t t-inherit="point_of_sale.Navbar" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('pos-rightheader')]" position="before">
+            <div class="d-flex align-items-center me-2">
+                <!-- Botón de Guía de Atajos de Teclado con atajo [F1] -->
+                <button type="button"
+                        class="btn btn-sm btn-dark text-white fw-bold d-flex align-items-center gap-1 rounded-pill px-3 py-1 shadow-sm border border-secondary"
+                        t-on-click="toggleShortcutsGuide"
+                        style="height: 34px; line-height: 1;"
+                        title="Ver guía completa de atajos de teclado (Atajo de teclado: F1)">
+                    <span>⌨️</span>
+                    <span style="font-size: 13px;">Atajos</span>
+                    <span class="badge bg-secondary text-white rounded px-1 py-0 ms-1 fw-bold" style="font-size: 10px;">F1</span>
+                </button>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

@@ -1,0 +1,32 @@
+{
+    # Email global para notificaciones de Let's Encrypt SSL
+    email {$ACME_EMAIL:admin@example.com}
+}
+
+{$DOMAIN_NAME:localhost} {
+    # Compresión gzip y zstd para respuestas HTTP
+    encode gzip zstd
+
+    # Odoo WebSocket y Longpolling (Canales en tiempo real y chat Discuss)
+    handle /websocket* {
+        reverse_proxy web:8069 {
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto https
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    # Tráfico general de Odoo HTTP
+    handle {
+        reverse_proxy web:8069 {
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto https
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    # Tamaño máximo de carga de archivos (ej. 100MB para respaldos/adjuntos)
+    request_body {
+        max_size 100MB
+    }
+}

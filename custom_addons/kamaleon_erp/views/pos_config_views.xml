@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Extensión del formulario de Configuración de Punto de Venta -->
+        <record id="pos_config_view_form_inherit_dual_currency" model="ir.ui.view">
+            <field name="name">pos.config.form.inherit.dual.currency</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <h2>Conversión Multimoneda Venezuela (Dólar / Bolívares)</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="x_enable_dual_currency"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="x_enable_dual_currency" string="Habilitar Doble Moneda ($ / Bs.)"/>
+                                <div class="text-muted">
+                                    Muestra en tiempo real los precios y totales en Dólares y Bolívares.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box" invisible="not x_enable_dual_currency">
+                            <div class="o_setting_right_pane">
+                                <label for="x_ves_rate" string="Tasa del Día BCV / VES (Bs/$)"/>
+                                <div class="content-group mt8">
+                                    <field name="x_ves_rate" class="oe_inline"/> <span class="fw-bold ms-2">Bs / USD</span>
+                                </div>
+                                <div class="text-muted">
+                                    También se puede actualizar directamente en vivo desde la barra superior del Punto de Venta.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box" invisible="not x_enable_dual_currency">
+                            <div class="o_setting_left_pane">
+                                <field name="x_print_receipt_in_bs"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="x_print_receipt_in_bs" string="Imprimir Boleta / Recibo en Bolívares"/>
+                                <div class="text-muted">
+                                    Al imprimir la boleta, los precios unitarios, subtotales y total saldrán exclusivamente en Bolívares (Bs.).
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box" invisible="not x_enable_dual_currency">
+                            <div class="o_setting_right_pane">
+                                <label for="x_secondary_currency_symbol" string="Símbolo Moneda Secundaria"/>
+                                <div class="content-group mt8">
+                                    <field name="x_secondary_currency_symbol" class="oe_inline"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="x_rz_receipt"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="x_rz_receipt" string="Boleta Especial RZ Marquet (r* ... z*)"/>
+                                <div class="text-muted">
+                                    Imprime exclusivamente la boleta simplificada con r*, cliente, cédula, tabla de productos en Bs, total y z*.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

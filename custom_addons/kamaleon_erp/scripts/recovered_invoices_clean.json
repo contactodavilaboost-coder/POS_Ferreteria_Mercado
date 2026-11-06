@@ -1,0 +1,1795 @@
+{
+  "Borrador_de_factura_proforma (1).pdf": {
+    "file": "Borrador_de_factura_proforma (1).pdf",
+    "number": "45",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "N/A",
+    "vendedor": "N/A",
+    "total": 0,
+    "lines_count": 0,
+    "lines": []
+  },
+  "Borrador_de_factura_proforma (2).pdf": {
+    "file": "Borrador_de_factura_proforma (2).pdf",
+    "number": "95",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "V194498108",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 54.42,
+    "lines_count": 7,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 12.58
+      },
+      {
+        "qty": 1.0,
+        "description": "Afeitadora Dorco 1x24",
+        "price": 9.25,
+        "subtotal": 9.25
+      },
+      {
+        "qty": 1.0,
+        "description": "Pila AAA x4und 1x10",
+        "price": 10.61,
+        "subtotal": 10.61
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas multiuso aliclean set de 10pzas 1x1",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 4.0,
+        "description": "Paño de cocina estampado 1x1",
+        "price": 1.57,
+        "subtotal": 6.28
+      },
+      {
+        "qty": 2.0,
+        "description": "Jarra plastica con tapa 2.5 Lt 1x1",
+        "price": 2.88,
+        "subtotal": 5.76
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas p/brillo de alambre inox Premium 12 pzas 1x1",
+        "price": 5.95,
+        "subtotal": 5.95
+      }
+    ]
+  },
+  "Borrador_de_factura_proforma (3).pdf": {
+    "file": "Borrador_de_factura_proforma (3).pdf",
+    "number": "102",
+    "date": "2026-08-25",
+    "client": "Alberto José Rojas Polanco",
+    "rif": "V171028805",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 155.68,
+    "lines_count": 18,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de 3Kg con asas 1x10x100",
+        "price": 12.88,
+        "subtotal": 12.88
+      },
+      {
+        "qty": 1.0,
+        "description": "Rollo termico para punto 1x10",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 1.0,
+        "description": "Vaselina 60g natural o cacao 1x12",
+        "price": 19.39,
+        "subtotal": 19.39
+      },
+      {
+        "qty": 1.0,
+        "description": "Acetona 1x6",
+        "price": 11.31,
+        "subtotal": 11.31
+      },
+      {
+        "qty": 1.0,
+        "description": "Foami carta paquete 1x10 Surtido",
+        "price": 3.75,
+        "subtotal": 3.75
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirro de embalar 45mt 1x6",
+        "price": 8.75,
+        "subtotal": 8.75
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirro de embalar 100mt 1x1",
+        "price": 1.93,
+        "subtotal": 1.93
+      },
+      {
+        "qty": 1.0,
+        "description": "Set de 12 candados 1x12",
+        "price": 12.95,
+        "subtotal": 12.95
+      },
+      {
+        "qty": 3.0,
+        "description": "Pega loca astro 1x12",
+        "price": 3.89,
+        "subtotal": 11.67
+      },
+      {
+        "qty": 1.0,
+        "description": "Crema de zapato Cherry negro 1x12",
+        "price": 8.72,
+        "subtotal": 8.72
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirrap plastico negro 4x300mm 100 pzas 1x1",
+        "price": 2.27,
+        "subtotal": 2.27
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirrap plastico negro 5x400mm 100 pzas 1x1",
+        "price": 3.91,
+        "subtotal": 3.91
+      },
+      {
+        "qty": 12.0,
+        "description": "Pega tanque sqbagum amarillo/azul 1x1",
+        "price": 1.89,
+        "subtotal": 22.68
+      },
+      {
+        "qty": 1.0,
+        "description": "Pinzas de madera para ropa 20pza 1x6",
+        "price": 5.48,
+        "subtotal": 5.48
+      },
+      {
+        "qty": 1.0,
+        "description": "Pinzas de plastico p/ropa Caliplast 16pza 1x6",
+        "price": 7.6,
+        "subtotal": 7.6
+      },
+      {
+        "qty": 1.0,
+        "description": "Pinzas coloridas metal p/ropa 10pzas 1x6",
+        "price": 7.65,
+        "subtotal": 7.65
+      },
+      {
+        "qty": 6.0,
+        "description": "Vela topper Feliz cumpleaños 1x1",
+        "price": 1.06,
+        "subtotal": 6.36
+      },
+      {
+        "qty": 1.0,
+        "description": "Cake topper feliz cumpleaños 1x6",
+        "price": 4.39,
+        "subtotal": 4.39
+      }
+    ]
+  },
+  "Borrador_de_factura_proforma.pdf": {
+    "file": "Borrador_de_factura_proforma.pdf",
+    "number": "44",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "V107022470",
+    "vendedor": "Raed Said Rodriguez Veliz (admin)",
+    "total": 1.38,
+    "lines_count": 1,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Alcohol 120ml spray",
+        "price": 1.38,
+        "subtotal": 1.38
+      }
+    ]
+  },
+  "S00038": {
+    "file": "Orden - S00038.pdf",
+    "number": "S00038",
+    "date": "08/20/2026",
+    "client": "INVERSIONES GIORPRINTS, C.A.",
+    "rif": "J418336200",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 96.2,
+    "lines_count": 9,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Papel envolvente tipo periodico 1x4Kg",
+        "price": 11.9,
+        "subtotal": 11.9
+      },
+      {
+        "qty": 1.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 12.58
+      },
+      {
+        "qty": 1.0,
+        "description": "Pitillos paquete de 150u 1x1",
+        "price": 1.69,
+        "subtotal": 1.69
+      },
+      {
+        "qty": 1.0,
+        "description": "[0029JA] Colitas color neutro paquete 1x12",
+        "price": 4.77,
+        "subtotal": 4.77
+      },
+      {
+        "qty": 1.0,
+        "description": "[0611BSF] Jabon de tocador Bebe 115g 1x36",
+        "price": 28.93,
+        "subtotal": 28.93
+      },
+      {
+        "qty": 6.0,
+        "description": "[0001CSG] Alcohol 100ml 1x1",
+        "price": 0.98,
+        "subtotal": 5.88
+      },
+      {
+        "qty": 1.0,
+        "description": "Afeitadora Dorco paquete de 5und 1x20 caballero",
+        "price": 25.47,
+        "subtotal": 25.47
+      },
+      {
+        "qty": 1.0,
+        "description": "[060901AO] Velas volcan de cumpleaños 18 cm paqx6u Surtidos 1x1",
+        "price": 2.69,
+        "subtotal": 2.69
+      },
+      {
+        "qty": 1.0,
+        "description": "[0609AO] Velas volcan de cumpleaños 15 cm paqx6u 1x1",
+        "price": 2.29,
+        "subtotal": 2.29
+      }
+    ]
+  },
+  "ZE/2026/00002": {
+    "file": "ZE_2026_00002.pdf",
+    "number": "ZE/2026/00002",
+    "date": "2026-08-20",
+    "client": "Nombre:",
+    "rif": "V099286594",
+    "vendedor": "Jorge Arevalo",
+    "total": 80.57,
+    "lines_count": 10,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Pitillos paquete de 150u 1x1",
+        "price": 1.69,
+        "subtotal": 1.69
+      },
+      {
+        "qty": 1.0,
+        "description": "Jabon de tocador Bebe 115g 1x36",
+        "price": 28.93,
+        "subtotal": 28.93
+      },
+      {
+        "qty": 1.0,
+        "description": "Liguitas en paquete surtidas",
+        "price": 4.19,
+        "subtotal": 4.19
+      },
+      {
+        "qty": 1.0,
+        "description": "Pega epoxica secado rapido 3min 1x1",
+        "price": 2.81,
+        "subtotal": 2.81
+      },
+      {
+        "qty": 1.0,
+        "description": "Lampara barra led recargable portatil 100W DESCUENTO JULIO 1x1",
+        "price": 7.48,
+        "subtotal": 7.48
+      },
+      {
+        "qty": 1.0,
+        "description": "Estuche de termoencogibles para cables 560pzas 1x1",
+        "price": 8.95,
+        "subtotal": 8.95
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas de brillo 6pzas jabonosas 1x1",
+        "price": 1.99,
+        "subtotal": 1.99
+      },
+      {
+        "qty": 4.0,
+        "description": "Caracol de cocina 1x1",
+        "price": 2.35,
+        "subtotal": 9.4
+      },
+      {
+        "qty": 1.0,
+        "description": "Colitas de colores paquete 1x12",
+        "price": 4.77,
+        "subtotal": 4.77
+      },
+      {
+        "qty": 1.0,
+        "description": "Teipe electrico 3M 1x10",
+        "price": 10.36,
+        "subtotal": 10.36
+      }
+    ]
+  },
+  "ZE/2026/00003": {
+    "file": "ZE_2026_00003.pdf",
+    "number": "ZE/2026/00003",
+    "date": "2026-08-21",
+    "client": "Nombre:",
+    "rif": "V099286594",
+    "vendedor": "Jorge Arevalo",
+    "total": 6.68,
+    "lines_count": 1,
+    "lines": [
+      {
+        "qty": 4.0,
+        "description": "Lampara led 110v 50w con rosca 1x1",
+        "price": 1.67,
+        "subtotal": 6.68
+      }
+    ]
+  },
+  "ZE/2026/00004": {
+    "file": "ZE_2026_00004.pdf",
+    "number": "ZE/2026/00004",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "V099286594",
+    "vendedor": "Jorge Arevalo",
+    "total": 5.97,
+    "lines_count": 1,
+    "lines": [
+      {
+        "qty": 3.0,
+        "description": "Esponjas de brillo 6pzas jabonosas 1x1",
+        "price": 1.99,
+        "subtotal": 5.97
+      }
+    ]
+  },
+  "ZE/2026/00005": {
+    "file": "ZE_2026_00005.pdf",
+    "number": "ZE/2026/00005",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "V32704662",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 201.55,
+    "lines_count": 25,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Guantes desechables para manipulacion de alimentos 1x10x100",
+        "price": 8.98,
+        "subtotal": 8.98
+      },
+      {
+        "qty": 1.0,
+        "description": "Guantes 100 und Nitro 1x1",
+        "price": 16.78,
+        "subtotal": 16.78
+      },
+      {
+        "qty": 1.0,
+        "description": "Peine sencillo 1x12",
+        "price": 4.19,
+        "subtotal": 4.19
+      },
+      {
+        "qty": 1.0,
+        "description": "Peine saca piojos metalico moderno 1x6",
+        "price": 5.59,
+        "subtotal": 5.59
+      },
+      {
+        "qty": 1.0,
+        "description": "Hisopos de paquete x100 1x20",
+        "price": 6.98,
+        "subtotal": 6.98
+      },
+      {
+        "qty": 1.0,
+        "description": "Cepillo de dientes economico 1x12",
+        "price": 4.14,
+        "subtotal": 4.14
+      },
+      {
+        "qty": 2.0,
+        "description": "Juego de domino estuche plastico 1x1",
+        "price": 5.42,
+        "subtotal": 10.84
+      },
+      {
+        "qty": 1.0,
+        "description": "Pila AA x4und 1x10",
+        "price": 10.61,
+        "subtotal": 10.61
+      },
+      {
+        "qty": 1.0,
+        "description": "Pila AAA x4und 1x10",
+        "price": 10.61,
+        "subtotal": 10.61
+      },
+      {
+        "qty": 4.0,
+        "description": "Rallo 4 lados c/mango plastico 1x1",
+        "price": 2.78,
+        "subtotal": 11.12
+      },
+      {
+        "qty": 3.0,
+        "description": "Cargador completo tipo c 1x1",
+        "price": 4.51,
+        "subtotal": 13.53
+      },
+      {
+        "qty": 3.0,
+        "description": "Cargador completo tipo micro V8 1x1",
+        "price": 4.51,
+        "subtotal": 13.53
+      },
+      {
+        "qty": 6.0,
+        "description": "Bombillo led 12W amanerluz 1x1",
+        "price": 0.98,
+        "subtotal": 5.88
+      },
+      {
+        "qty": 4.0,
+        "description": "Laminas pega moscas 1x10",
+        "price": 1.75,
+        "subtotal": 7.0
+      },
+      {
+        "qty": 1.0,
+        "description": "Pega loca astro 1x12",
+        "price": 3.89,
+        "subtotal": 3.89
+      },
+      {
+        "qty": 1.0,
+        "description": "Gorros de vuelta negro completos 1x12",
+        "price": 10.75,
+        "subtotal": 10.75
+      },
+      {
+        "qty": 1.0,
+        "description": "Condones duo 1x18",
+        "price": 13.79,
+        "subtotal": 13.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Caja de hilo p/coser 1x1 Blanco",
+        "price": 1.79,
+        "subtotal": 1.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Caja de hilo p/coser 1x1 Negro",
+        "price": 1.79,
+        "subtotal": 1.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Caja de hilo p/coser 1x1 Surtido",
+        "price": 1.79,
+        "subtotal": 1.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Pinzas coloridas metal p/ropa 10pzas 1x6",
+        "price": 7.65,
+        "subtotal": 7.65
+      },
+      {
+        "qty": 1.0,
+        "description": "Conservador de alimentos rectangular con tapa 1x6",
+        "price": 4.35,
+        "subtotal": 4.35
+      },
+      {
+        "qty": 1.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 12.58
+      },
+      {
+        "qty": 1.0,
+        "description": "Pitillos de frappe paquete de 100u 1x1",
+        "price": 1.69,
+        "subtotal": 1.69
+      },
+      {
+        "qty": 5.0,
+        "description": "Cepillo desenredante grande 1x1",
+        "price": 2.34,
+        "subtotal": 11.7
+      }
+    ]
+  },
+  "ZE/2026/00006": {
+    "file": "ZE_2026_00006.pdf",
+    "number": "ZE/2026/00006",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "J507817903",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 49.25,
+    "lines_count": 6,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Afeitadora Dorco 1x24",
+        "price": 9.25,
+        "subtotal": 9.25
+      },
+      {
+        "qty": 1.0,
+        "description": "Bolsa de teta transparente 1x10x100",
+        "price": 7.75,
+        "subtotal": 7.75
+      },
+      {
+        "qty": 1.0,
+        "description": "Boligrafos Kilometrico 1x24",
+        "price": 5.17,
+        "subtotal": 5.17
+      },
+      {
+        "qty": 4.0,
+        "description": "Papel aluminio 10m 1x1",
+        "price": 2.56,
+        "subtotal": 10.24
+      },
+      {
+        "qty": 1.0,
+        "description": "Set de 12 candados 1x12",
+        "price": 12.95,
+        "subtotal": 12.95
+      },
+      {
+        "qty": 1.0,
+        "description": "Pega loca astro 1x12",
+        "price": 3.89,
+        "subtotal": 3.89
+      }
+    ]
+  },
+  "ZE/2026/00007": {
+    "file": "ZE_2026_00007.pdf",
+    "number": "ZE/2026/00007",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "V29535598",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 44.21,
+    "lines_count": 6,
+    "lines": [
+      {
+        "qty": 2.0,
+        "description": "Recolector de orina 1x12",
+        "price": 3.75,
+        "subtotal": 7.5
+      },
+      {
+        "qty": 1.0,
+        "description": "Jeringas 3cc 1x24 10% DESCUENTO",
+        "price": 4.87,
+        "subtotal": 4.87
+      },
+      {
+        "qty": 1.0,
+        "description": "Jeringas 10cc 1x24 10% DESCUENTO",
+        "price": 8.62,
+        "subtotal": 8.62
+      },
+      {
+        "qty": 1.0,
+        "description": "Jeringas 5cc 1x24 10% DESCUENTO",
+        "price": 6.36,
+        "subtotal": 6.36
+      },
+      {
+        "qty": 12.0,
+        "description": "Alcohol 100ml 1x1",
+        "price": 0.98,
+        "subtotal": 11.76
+      },
+      {
+        "qty": 6.0,
+        "description": "Agua oxigenada 100ml 1x1",
+        "price": 0.85,
+        "subtotal": 5.1
+      }
+    ]
+  },
+  "ZE/2026/00008": {
+    "file": "ZE_2026_00008.pdf",
+    "number": "ZE/2026/00008",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "V9600483",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 37.65,
+    "lines_count": 4,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 12.58
+      },
+      {
+        "qty": 2.0,
+        "description": "Pitillos de frappe paquete de 100u 1x1",
+        "price": 1.69,
+        "subtotal": 3.38
+      },
+      {
+        "qty": 1.0,
+        "description": "Condones duo 1x18",
+        "price": 13.79,
+        "subtotal": 13.79
+      },
+      {
+        "qty": 5.0,
+        "description": "Llave de chorro 1x1",
+        "price": 1.58,
+        "subtotal": 7.9
+      }
+    ]
+  },
+  "ZE/2026/00009": {
+    "file": "ZE_2026_00009.pdf",
+    "number": "ZE/2026/00009",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "V107083797",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 32.86,
+    "lines_count": 4,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de teta transparente 1x10x100",
+        "price": 7.75,
+        "subtotal": 7.75
+      },
+      {
+        "qty": 2.0,
+        "description": "Rollo termico para punto 1x10",
+        "price": 3.99,
+        "subtotal": 7.98
+      },
+      {
+        "qty": 2.0,
+        "description": "Paletas helado de colores paquete 1x6",
+        "price": 4.19,
+        "subtotal": 8.38
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirro de embalar 45mt 1x6",
+        "price": 8.75,
+        "subtotal": 8.75
+      }
+    ]
+  },
+  "ZE/2026/00010": {
+    "file": "ZE_2026_00010.pdf",
+    "number": "ZE/2026/00010",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "J403994986",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 30.71,
+    "lines_count": 3,
+    "lines": [
+      {
+        "qty": 10.0,
+        "description": "Alcohol 100ml 1x1",
+        "price": 0.98,
+        "subtotal": 9.8
+      },
+      {
+        "qty": 1.0,
+        "description": "Corta uñas grande liso con lima 1x12",
+        "price": 9.41,
+        "subtotal": 9.41
+      },
+      {
+        "qty": 1.0,
+        "description": "Silicon liquido 50 ml 1x12",
+        "price": 11.5,
+        "subtotal": 11.5
+      }
+    ]
+  },
+  "ZE/2026/00011": {
+    "file": "ZE_2026_00011.pdf",
+    "number": "ZE/2026/00011",
+    "date": "2026-08-24",
+    "client": "Nombre:",
+    "rif": "V306747688",
+    "vendedor": "Jorge Arevalo",
+    "total": 48.99,
+    "lines_count": 9,
+    "lines": [
+      {
+        "qty": 10.0,
+        "description": "Carton pega raton 1x2",
+        "price": 0.89,
+        "subtotal": 8.9
+      },
+      {
+        "qty": 1.0,
+        "description": "Rollo termico para punto 1x10",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 1.0,
+        "description": "Papel bond 1x25 20% DESCUENTO ESPECIAL mayo",
+        "price": 6.39,
+        "subtotal": 6.39
+      },
+      {
+        "qty": 1.0,
+        "description": "Liguitas en paquete surtidas",
+        "price": 4.19,
+        "subtotal": 4.19
+      },
+      {
+        "qty": 1.0,
+        "description": "Caja de hilo p/coser 1x1 Negro",
+        "price": 1.79,
+        "subtotal": 1.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Crema de zapato Cherry negro 1x12",
+        "price": 8.72,
+        "subtotal": 8.72
+      },
+      {
+        "qty": 4.0,
+        "description": "Audifonos normales L29 1x1",
+        "price": 1.92,
+        "subtotal": 7.68
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas multiuso aliclean set de 10pzas 1x1",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 2.0,
+        "description": "Lampara led 110v 50w con rosca 1x1",
+        "price": 1.67,
+        "subtotal": 3.34
+      }
+    ]
+  },
+  "ZE/2026/00012": {
+    "file": "ZE_2026_00012_proforma.pdf",
+    "number": "ZE/2026/00012",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "V194498108",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 54.42,
+    "lines_count": 7,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 12.58
+      },
+      {
+        "qty": 1.0,
+        "description": "Afeitadora Dorco 1x24",
+        "price": 9.25,
+        "subtotal": 9.25
+      },
+      {
+        "qty": 1.0,
+        "description": "Pila AAA x4und 1x10",
+        "price": 10.61,
+        "subtotal": 10.61
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas multiuso aliclean set de 10pzas 1x1",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 4.0,
+        "description": "Paño de cocina estampado 1x1",
+        "price": 1.57,
+        "subtotal": 6.28
+      },
+      {
+        "qty": 2.0,
+        "description": "Jarra plastica con tapa 2.5 Lt 1x1",
+        "price": 2.88,
+        "subtotal": 5.76
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas p/brillo de alambre inox Premium 12 pzas 1x1",
+        "price": 5.95,
+        "subtotal": 5.95
+      }
+    ]
+  },
+  "ZE/2026/00013": {
+    "file": "ZE_2026_00013_proforma.pdf",
+    "number": "ZE/2026/00013",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "J404524711",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 85.8,
+    "lines_count": 10,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 12.58
+      },
+      {
+        "qty": 1.0,
+        "description": "Rollo termico para punto 1x10",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 1.0,
+        "description": "Pinzas de cejas 12 pzas. 1x1",
+        "price": 3.68,
+        "subtotal": 3.68
+      },
+      {
+        "qty": 6.0,
+        "description": "Agua oxigenada 120 ml vol 20 1x1",
+        "price": 1.79,
+        "subtotal": 10.74
+      },
+      {
+        "qty": 6.0,
+        "description": "Agua oxigenada 120 ml vol 30 1x1",
+        "price": 1.79,
+        "subtotal": 10.74
+      },
+      {
+        "qty": 1.0,
+        "description": "Acetona 1x6",
+        "price": 11.31,
+        "subtotal": 11.31
+      },
+      {
+        "qty": 1.0,
+        "description": "Liguitas en paquete surtidas",
+        "price": 4.19,
+        "subtotal": 4.19
+      },
+      {
+        "qty": 1.0,
+        "description": "Talco Borocanfor 60g 1x6",
+        "price": 12.89,
+        "subtotal": 12.89
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirro de papel pequeño 1x8",
+        "price": 6.43,
+        "subtotal": 6.43
+      },
+      {
+        "qty": 1.0,
+        "description": "Afeitadora Dorco 1x24",
+        "price": 9.25,
+        "subtotal": 9.25
+      }
+    ]
+  },
+  "ZE/2026/00014": {
+    "file": "ZE_2026_00014_proforma.pdf",
+    "number": "ZE/2026/00014",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "V121814710",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 35.75,
+    "lines_count": 2,
+    "lines": [
+      {
+        "qty": 3.0,
+        "description": "Coloracion en crema para cabello Siglo color negro 1x10",
+        "price": 8.38,
+        "subtotal": 25.14
+      },
+      {
+        "qty": 1.0,
+        "description": "Pila AAA x4und 1x10",
+        "price": 10.61,
+        "subtotal": 10.61
+      }
+    ]
+  },
+  "ZE/2026/00015": {
+    "file": "ZE_2026_00015_proforma.pdf",
+    "number": "ZE/2026/00015",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "J504280763",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 194.63,
+    "lines_count": 7,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Marcador permanente punta doble 10und 1x1 Negro",
+        "price": 4.59,
+        "subtotal": 4.59
+      },
+      {
+        "qty": 1.0,
+        "description": "Carpetas oficio de colores 1x10",
+        "price": 5.28,
+        "subtotal": 5.28
+      },
+      {
+        "qty": 12.0,
+        "description": "Socate de ceramica 1x1",
+        "price": 1.48,
+        "subtotal": 17.76
+      },
+      {
+        "qty": 10.0,
+        "description": "Pinzas coloridas metal p/ropa 10pzas 1x6",
+        "price": 7.65,
+        "subtotal": 76.5
+      },
+      {
+        "qty": 2.0,
+        "description": "Peso electrico 40kg 1x1 DESCUENTO ESPECIAL MAYO",
+        "price": 39.99,
+        "subtotal": 79.98
+      },
+      {
+        "qty": 1.0,
+        "description": "Boligrafos Kilometrico 1x24",
+        "price": 5.17,
+        "subtotal": 5.17
+      },
+      {
+        "qty": 1.0,
+        "description": "Boligrafos de gel 4und 1x6",
+        "price": 5.35,
+        "subtotal": 5.35
+      }
+    ]
+  },
+  "ZE/2026/00016": {
+    "file": "ZE_2026_00016_proforma.pdf",
+    "number": "ZE/2026/00016",
+    "date": "2026-08-25",
+    "client": "Nombre:",
+    "rif": "J508187547",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 33.0,
+    "lines_count": 7,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Boligrafos Kilometrico 1x24",
+        "price": 5.17,
+        "subtotal": 5.17
+      },
+      {
+        "qty": 1.0,
+        "description": "Hojas de examen 1x50",
+        "price": 6.12,
+        "subtotal": 6.12
+      },
+      {
+        "qty": 2.0,
+        "description": "Laminas pega moscas 1x10",
+        "price": 1.75,
+        "subtotal": 3.5
+      },
+      {
+        "qty": 1.0,
+        "description": "Pega loca astro 1x12",
+        "price": 3.89,
+        "subtotal": 3.89
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas p/brillo de alambre inox Premium 12 pzas 1x1",
+        "price": 5.95,
+        "subtotal": 5.95
+      },
+      {
+        "qty": 2.0,
+        "description": "Plagatox uso domestico 1x1",
+        "price": 2.19,
+        "subtotal": 4.38
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas multiuso aliclean set de 10pzas 1x1",
+        "price": 3.99,
+        "subtotal": 3.99
+      }
+    ]
+  },
+  "ZE/2026/00017": {
+    "file": "ZE_2026_00017_proforma.pdf",
+    "number": "ZE/2026/00017",
+    "date": "2026-08-25",
+    "client": "EMPRENDIMIENTO JESUS VILLASMIL 3 (V28251510)",
+    "rif": "J507901475",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 63.45,
+    "lines_count": 11,
+    "lines": [
+      {
+        "qty": 2.0,
+        "description": "Silbatos de colores variados con cuerda 1x24u",
+        "price": 4.19,
+        "subtotal": 8.38
+      },
+      {
+        "qty": 3.0,
+        "description": "Paquete de 18 cucharas plasticas Caliplast pequeña 1x6",
+        "price": 2.99,
+        "subtotal": 8.97
+      },
+      {
+        "qty": 1.0,
+        "description": "Cake topper feliz cumpleaños 1x6",
+        "price": 4.39,
+        "subtotal": 4.39
+      },
+      {
+        "qty": 1.0,
+        "description": "Velas volcan de cumpleaños 15 cm paqx6u 1x1",
+        "price": 2.29,
+        "subtotal": 2.29
+      },
+      {
+        "qty": 1.0,
+        "description": "Velas volcan de cumpleaños 18 cm paqx6u Surtidos 1x1",
+        "price": 2.69,
+        "subtotal": 2.69
+      },
+      {
+        "qty": 1.0,
+        "description": "Estuche de termoencogibles para cables 560pzas 1x1",
+        "price": 8.95,
+        "subtotal": 8.95
+      },
+      {
+        "qty": 1.0,
+        "description": "Corta uñas grande liso con lima 1x12",
+        "price": 9.41,
+        "subtotal": 9.41
+      },
+      {
+        "qty": 1.0,
+        "description": "Sobre manila carta 1x25",
+        "price": 7.91,
+        "subtotal": 7.91
+      },
+      {
+        "qty": 6.0,
+        "description": "Teflon grande 15 mt 1x1",
+        "price": 0.81,
+        "subtotal": 4.86
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirrap plastico negro 4x200mm 100 pzas 1x1",
+        "price": 1.69,
+        "subtotal": 1.69
+      },
+      {
+        "qty": 1.0,
+        "description": "Tirrap plastico negro 5x400mm 100 pzas 1x1",
+        "price": 3.91,
+        "subtotal": 3.91
+      }
+    ]
+  },
+  "ZE/2026/00018": {
+    "file": "ZE_2026_00018_proforma.pdf",
+    "number": "ZE/2026/00018",
+    "date": "2026-08-25",
+    "client": "PANADERIA DORADITOS PAN (MERCADO NUEVO)",
+    "rif": "J412415549",
+    "vendedor": "Rosimar Millan",
+    "total": 52.55,
+    "lines_count": 2,
+    "lines": [
+      {
+        "qty": 3.0,
+        "description": "Condones duo 1x18",
+        "price": 13.79,
+        "subtotal": 41.37
+      },
+      {
+        "qty": 2.0,
+        "description": "Wiki wiki Negro 1x12",
+        "price": 5.59,
+        "subtotal": 11.18
+      }
+    ]
+  },
+  "ZE/2026/00019": {
+    "file": "ZE_2026_00019_proforma.pdf",
+    "number": "ZE/2026/00019",
+    "date": "2026-08-25",
+    "client": "BODEGA EL NEGRO PETIT",
+    "rif": "V12733000",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 52.52,
+    "lines_count": 7,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Tapabocas negro 1x50",
+        "price": 5.81,
+        "subtotal": 5.81
+      },
+      {
+        "qty": 1.0,
+        "description": "Ganchos negros pequeños 1x12",
+        "price": 8.13,
+        "subtotal": 8.13
+      },
+      {
+        "qty": 1.0,
+        "description": "Lapiz para microblading (cejas) 1x6",
+        "price": 4.83,
+        "subtotal": 4.83
+      },
+      {
+        "qty": 1.0,
+        "description": "Vaselina 60g natural o cacao 1x12",
+        "price": 19.39,
+        "subtotal": 19.39
+      },
+      {
+        "qty": 2.0,
+        "description": "Curitas 100 und 1x1",
+        "price": 3.52,
+        "subtotal": 7.04
+      },
+      {
+        "qty": 4.0,
+        "description": "Agua oxigenada 100ml 1x1",
+        "price": 0.85,
+        "subtotal": 3.4
+      },
+      {
+        "qty": 4.0,
+        "description": "Alcohol 100ml 1x1",
+        "price": 0.98,
+        "subtotal": 3.92
+      }
+    ]
+  },
+  "ZE/2026/00020": {
+    "file": "ZE_2026_00020_proforma.pdf",
+    "number": "ZE/2026/00020",
+    "date": "2026-08-25",
+    "client": "EURIS EUDESIMO PIÑA BARROSO",
+    "rif": "V226084203",
+    "vendedor": "Jorge Arevalo",
+    "total": 88.53,
+    "lines_count": 7,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Jabon de tocador Bebe 115g 1x36",
+        "price": 28.93,
+        "subtotal": 28.93
+      },
+      {
+        "qty": 1.0,
+        "description": "Hojilla Dorco 1x12",
+        "price": 9.87,
+        "subtotal": 9.87
+      },
+      {
+        "qty": 1.0,
+        "description": "Cepillo de dientes Colgate max fresh 1x12",
+        "price": 13.22,
+        "subtotal": 13.22
+      },
+      {
+        "qty": 1.0,
+        "description": "Metro de 3m 1x1",
+        "price": 2.43,
+        "subtotal": 2.43
+      },
+      {
+        "qty": 1.0,
+        "description": "Papel aluminio 5m 1x1",
+        "price": 1.76,
+        "subtotal": 1.76
+      },
+      {
+        "qty": 1.0,
+        "description": "Afeitadora Dorco paquete de 5und 1x20 dama",
+        "price": 25.47,
+        "subtotal": 25.47
+      },
+      {
+        "qty": 5.0,
+        "description": "Velas popular medianas 1x8",
+        "price": 1.37,
+        "subtotal": 6.85
+      }
+    ]
+  },
+  "ZE/2026/00021": {
+    "file": "ZE_2026_00021_proforma.pdf",
+    "number": "ZE/2026/00021",
+    "date": "2026-08-25",
+    "client": "EMPRENDIMIENTO JESUS VILLASMIL 3 (V28251510)",
+    "rif": "J507901475",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 25.16,
+    "lines_count": 1,
+    "lines": [
+      {
+        "qty": 2.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 25.16
+      }
+    ]
+  },
+  "ZE/2026/00022": {
+    "file": "ZE_2026_00022_proforma.pdf",
+    "number": "ZE/2026/00022",
+    "date": "2026-08-25",
+    "client": "INVERSIONES COELLO",
+    "rif": "V413115387",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 49.31,
+    "lines_count": 6,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Esponjas p/brillo de alambre inox Premium 12 pzas 1x1",
+        "price": 5.95,
+        "subtotal": 5.95
+      },
+      {
+        "qty": 2.0,
+        "description": "Bolsa de basura 200Lt 1x50",
+        "price": 12.58,
+        "subtotal": 25.16
+      },
+      {
+        "qty": 1.0,
+        "description": "Crema de zapato Cherry negro 1x12",
+        "price": 8.72,
+        "subtotal": 8.72
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas multiuso aliclean set de 10pzas 1x1",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 1.0,
+        "description": "Esponjas de brillo 6pzas jabonosas 1x1",
+        "price": 1.99,
+        "subtotal": 1.99
+      },
+      {
+        "qty": 2.0,
+        "description": "Laminas pega moscas 1x10",
+        "price": 1.75,
+        "subtotal": 3.5
+      }
+    ]
+  },
+  "ZE/2026/00023": {
+    "file": "ZE_2026_00023_proforma.pdf",
+    "number": "ZE/2026/00023",
+    "date": "2026-08-25",
+    "client": "EL MAGUEY",
+    "rif": "J500087810",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 84.56,
+    "lines_count": 11,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de teta transparente 1x10x100",
+        "price": 7.75,
+        "subtotal": 7.75
+      },
+      {
+        "qty": 1.0,
+        "description": "Rollo termico para punto 1x10",
+        "price": 3.99,
+        "subtotal": 3.99
+      },
+      {
+        "qty": 1.0,
+        "description": "Jabon de tocador Bebe 115g 1x36",
+        "price": 28.93,
+        "subtotal": 28.93
+      },
+      {
+        "qty": 1.0,
+        "description": "Tapabocas negro 1x50",
+        "price": 5.81,
+        "subtotal": 5.81
+      },
+      {
+        "qty": 1.0,
+        "description": "Pega loca astro 1x12",
+        "price": 3.89,
+        "subtotal": 3.89
+      },
+      {
+        "qty": 1.0,
+        "description": "Curitas 100 und 1x1",
+        "price": 3.52,
+        "subtotal": 3.52
+      },
+      {
+        "qty": 1.0,
+        "description": "Caja de hilo p/coser 1x1 Blanco",
+        "price": 1.79,
+        "subtotal": 1.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Caja de hilo p/coser 1x1 Negro",
+        "price": 1.79,
+        "subtotal": 1.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Caja de hilo p/coser 1x1 Surtido",
+        "price": 1.79,
+        "subtotal": 1.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Pinzas coloridas metal p/ropa 10pzas 1x6",
+        "price": 7.65,
+        "subtotal": 7.65
+      },
+      {
+        "qty": 1.0,
+        "description": "Cepillo con palo para barrer 1x6",
+        "price": 17.65,
+        "subtotal": 17.65
+      }
+    ]
+  },
+  "ZE/2026/00024": {
+    "file": "ZE_2026_00024.pdf",
+    "number": "ZE/2026/00024",
+    "date": "2026-08-25",
+    "client": "MULTITENDA DIMAS, R, C.A.",
+    "rif": "J410559942",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 556.04,
+    "lines_count": 47,
+    "lines": [
+      {
+        "qty": 2.0,
+        "description": "Aceite super 3en1 1x12",
+        "price": 17.29,
+        "subtotal": 34.58
+      },
+      {
+        "qty": 1.0,
+        "description": "Condones duo 1x18",
+        "price": 13.79,
+        "subtotal": 13.79
+      },
+      {
+        "qty": 1.0,
+        "description": "Mini masajeador adhesivo recargable 1x1",
+        "price": 3.25,
+        "subtotal": 3.25
+      },
+      {
+        "qty": 1.0,
+        "description": "Cepillo de dientes Colgate max fresh 1x12",
+        "price": 13.22,
+        "subtotal": 13.22
+      },
+      {
+        "qty": 2.0,
+        "description": "Gasa 5x5cm sobre de 2 esponjas 1x50",
+        "price": 3.35,
+        "subtotal": 6.7
+      },
+      {
+        "qty": 10.0,
+        "description": "Algodon 10g 1x1",
+        "price": 0.89,
+        "subtotal": 8.9
+      },
+      {
+        "qty": 6.0,
+        "description": "Algodon paquete de 50 motas 1x1",
+        "price": 1.99,
+        "subtotal": 11.94
+      },
+      {
+        "qty": 2.0,
+        "description": "Jeringas 10cc 1x24 10% DESCUENTO",
+        "price": 8.62,
+        "subtotal": 17.24
+      },
+      {
+        "qty": 2.0,
+        "description": "Jeringas 20cc 1x12 10% DESCUENTO",
+        "price": 5.85,
+        "subtotal": 11.7
+      },
+      {
+        "qty": 2.0,
+        "description": "Jeringas 3cc 1x24 10% DESCUENTO",
+        "price": 4.87,
+        "subtotal": 9.74
+      },
+      {
+        "qty": 2.0,
+        "description": "Jeringas 5cc 1x24 10% DESCUENTO",
+        "price": 6.36,
+        "subtotal": 12.72
+      },
+      {
+        "qty": 2.0,
+        "description": "Recolector de orina 1x12",
+        "price": 3.75,
+        "subtotal": 7.5
+      },
+      {
+        "qty": 2.0,
+        "description": "Recolector de heces 1x12",
+        "price": 2.88,
+        "subtotal": 5.76
+      },
+      {
+        "qty": 12.0,
+        "description": "Alcohol 100ml 1x1",
+        "price": 0.98,
+        "subtotal": 11.76
+      },
+      {
+        "qty": 1.0,
+        "description": "Silicon en barra grueso paquete de 800g 1x1",
+        "price": 10.48,
+        "subtotal": 10.48
+      },
+      {
+        "qty": 1.0,
+        "description": "Silicon en barra fino paquete de 800g 1x1",
+        "price": 10.48,
+        "subtotal": 10.48
+      },
+      {
+        "qty": 6.0,
+        "description": "Bomba de bicicleta 1x1",
+        "price": 3.96,
+        "subtotal": 23.76
+      },
+      {
+        "qty": 1.0,
+        "description": "Yesquero normal 1x50",
+        "price": 12.28,
+        "subtotal": 12.28
+      },
+      {
+        "qty": 1.0,
+        "description": "Boligrafos Kilometrico 1x24",
+        "price": 5.17,
+        "subtotal": 5.17
+      },
+      {
+        "qty": 6.0,
+        "description": "Cable plug 1x1",
+        "price": 1.23,
+        "subtotal": 7.38
+      },
+      {
+        "qty": 6.0,
+        "description": "Audifonos normales L29 1x1",
+        "price": 1.92,
+        "subtotal": 11.52
+      },
+      {
+        "qty": 6.0,
+        "description": "Cuchilla de licuadora 6 aspas 1x1",
+        "price": 3.27,
+        "subtotal": 19.62
+      },
+      {
+        "qty": 6.0,
+        "description": "Cuchilla de licuadora original 1x1",
+        "price": 2.66,
+        "subtotal": 15.96
+      },
+      {
+        "qty": 12.0,
+        "description": "Caracol de cocina 1x1",
+        "price": 2.16,
+        "subtotal": 25.92
+      },
+      {
+        "qty": 3.0,
+        "description": "Papel aluminio 5m 1x1",
+        "price": 1.76,
+        "subtotal": 5.28
+      },
+      {
+        "qty": 6.0,
+        "description": "Papel aluminio 10m 1x1",
+        "price": 2.56,
+        "subtotal": 15.36
+      },
+      {
+        "qty": 1.0,
+        "description": "Mondadientes de madera en envase dispensador 1x12",
+        "price": 3.77,
+        "subtotal": 3.77
+      },
+      {
+        "qty": 12.0,
+        "description": "Agua oxigenada 100ml 1x1",
+        "price": 0.79,
+        "subtotal": 9.48
+      },
+      {
+        "qty": 6.0,
+        "description": "Estaño de tubo 0.8mm 1x1",
+        "price": 1.18,
+        "subtotal": 7.08
+      },
+      {
+        "qty": 12.0,
+        "description": "Cable micro usb 1m unlutona 1x1",
+        "price": 1.78,
+        "subtotal": 21.36
+      },
+      {
+        "qty": 12.0,
+        "description": "Cable usb tipo C 1m unlutona 1x1",
+        "price": 2.09,
+        "subtotal": 25.08
+      },
+      {
+        "qty": 1.0,
+        "description": "Set de 12 candados 1x12",
+        "price": 12.95,
+        "subtotal": 12.95
+      },
+      {
+        "qty": 1.0,
+        "description": "Socate sencillo 1x20",
+        "price": 9.39,
+        "subtotal": 9.39
+      },
+      {
+        "qty": 3.0,
+        "description": "Metro de 3m 1x1",
+        "price": 2.43,
+        "subtotal": 7.29
+      },
+      {
+        "qty": 1.0,
+        "description": "Veneno para cucarachas 1x50",
+        "price": 11.58,
+        "subtotal": 11.58
+      },
+      {
+        "qty": 6.0,
+        "description": "Laminas pega moscas 1x10",
+        "price": 1.75,
+        "subtotal": 10.5
+      },
+      {
+        "qty": 3.0,
+        "description": "Pega loca astro 1x12",
+        "price": 3.89,
+        "subtotal": 11.67
+      },
+      {
+        "qty": 6.0,
+        "description": "Llave de chorro 1x1",
+        "price": 1.58,
+        "subtotal": 9.48
+      },
+      {
+        "qty": 1.0,
+        "description": "Wiki wiki Negro 1x12",
+        "price": 5.59,
+        "subtotal": 5.59
+      },
+      {
+        "qty": 1.0,
+        "description": "Crema de zapato Cherry negro 1x12",
+        "price": 8.72,
+        "subtotal": 8.72
+      },
+      {
+        "qty": 5.0,
+        "description": "Lampara Led 50w 110v 1x1",
+        "price": 1.99,
+        "subtotal": 9.95
+      },
+      {
+        "qty": 6.0,
+        "description": "Lampara led 110v 50w con rosca 1x1",
+        "price": 1.67,
+        "subtotal": 10.02
+      },
+      {
+        "qty": 6.0,
+        "description": "Pega epoxica secado rapido 3min 1x1",
+        "price": 2.81,
+        "subtotal": 16.86
+      },
+      {
+        "qty": 2.0,
+        "description": "Cautin soldador 40w",
+        "price": 2.87,
+        "subtotal": 5.74
+      },
+      {
+        "qty": 1.0,
+        "description": "Pinzas de plastico p/ropa Caliplast 16pza 1x6",
+        "price": 7.6,
+        "subtotal": 7.6
+      },
+      {
+        "qty": 4.0,
+        "description": "Velas volcan de cumpleaños 15 cm paqx6u 1x1",
+        "price": 2.29,
+        "subtotal": 9.16
+      },
+      {
+        "qty": 4.0,
+        "description": "Velas volcan de cumpleaños 18 cm paqx6u Surtidos 1x1",
+        "price": 2.69,
+        "subtotal": 10.76
+      }
+    ]
+  },
+  "ZE/2026/00025": {
+    "file": "ZE_2026_00025.pdf",
+    "number": "ZE/2026/00025",
+    "date": "2026-08-25",
+    "client": "JESUS LEONARDO PETIT GARCIA",
+    "rif": "V280921501",
+    "vendedor": "Emmanuel Fernandez",
+    "total": 260.75,
+    "lines_count": 12,
+    "lines": [
+      {
+        "qty": 1.0,
+        "description": "Bolsa de 15Kg 1x10x100",
+        "price": 29.99,
+        "subtotal": 29.99
+      },
+      {
+        "qty": 2.0,
+        "description": "Bolsa de 3Kg con asas 1x10x100",
+        "price": 12.88,
+        "subtotal": 25.76
+      },
+      {
+        "qty": 25.0,
+        "description": "Vasos desechables Nº57",
+        "price": 1.96,
+        "subtotal": 49.0
+      },
+      {
+        "qty": 25.0,
+        "description": "Vasos desechables Nº67",
+        "price": 1.92,
+        "subtotal": 48.0
+      },
+      {
+        "qty": 20.0,
+        "description": "Vasos desechables Nº127",
+        "price": 1.87,
+        "subtotal": 37.4
+      },
+      {
+        "qty": 2.0,
+        "description": "Mini masajeador adhesivo recargable 1x1",
+        "price": 3.25,
+        "subtotal": 6.5
+      },
+      {
+        "qty": 10.0,
+        "description": "Pitillos paquete de 150u 1x1",
+        "price": 1.35,
+        "subtotal": 13.5
+      },
+      {
+        "qty": 1.0,
+        "description": "Calculadora mediana 1x1",
+        "price": 5.27,
+        "subtotal": 5.27
+      },
+      {
+        "qty": 1.0,
+        "description": "Peso electrico 7kg 1x1 (caja amarilla)",
+        "price": 7.55,
+        "subtotal": 7.55
+      },
+      {
+        "qty": 12.0,
+        "description": "Caracol de cocina 1x1",
+        "price": 2.16,
+        "subtotal": 25.92
+      },
+      {
+        "qty": 2.0,
+        "description": "Cuchilla de licuadora original 1x1",
+        "price": 2.66,
+        "subtotal": 5.32
+      },
+      {
+        "qty": 2.0,
+        "description": "Cuchilla de licuadora 6 aspas 1x1",
+        "price": 3.27,
+        "subtotal": 6.54
+      }
+    ]
+  }
+}

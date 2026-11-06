@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- 1. Precio en Bolívares en la Tarjeta de Producto (ProductCard) -->
+    <t t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+        <xpath expr="//article" position="attributes">
+            <attribute name="t-on-click">onCardClick</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('product-content')]" position="after">
+            <div t-if="priceInBs" class="d-flex px-2 pb-1">
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0 fw-bold" style="font-size: 0.75rem;" t-esc="priceInBs"/>
+            </div>
+        </xpath>
+    </t>
+
+    <!-- 2. Total en Bolívares en el Resumen del Pedido (OrderWidget) -->
+    <t t-inherit="point_of_sale.OrderWidget" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('order-summary')]//div[hasclass('fs-2')]" position="after">
+            <div t-if="totalInBs" class="d-flex justify-content-between w-100 fs-4 text-success fw-bolder border-top pt-1 mt-1">
+                <span>Total (Bs.)</span>
+                <span t-esc="totalInBs" class="total-bs"/>
+            </div>
+        </xpath>
+    </t>
+
+    <!-- 3. Total a Pagar en Bolívares + Calculadora de Vuelto en Bs por Pago en $ (PaymentScreenDue) -->
+    <t t-inherit="point_of_sale.PaymentScreenDue" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('total')]" position="replace">
+            <div class="total text-center py-2 py-lg-3 text-success d-flex flex-column align-items-center justify-content-center">
+                <t t-if="totalDueInBs">
+                    <span class="fs-1 fw-bolder text-success" t-esc="totalDueInBs"/>
+                    <span class="fs-6 text-muted fw-normal mt-1">(Ref: <t t-esc="this.env.utils.formatCurrency(currentOrder.getTotalDue())"/>)</span>
+                </t>
+                <t t-else="">
+                    <t t-esc="this.env.utils.formatCurrency(currentOrder.getTotalDue())" />
+                </t>
+
+                <!-- Calculadora Rápida: Pago con Billete en $ -> Vuelto en Bs. -->
+                <div t-if="totalDueInBs" class="kamaleon-usd-cash-bar mt-2 px-2 w-100 d-flex flex-column align-items-center">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-1">
+                        <span class="badge bg-dark text-light border border-secondary px-2 py-1 me-1" style="font-size: 0.78rem;">
+                            💵 Billete $:
+                        </span>
+                        <button type="button" class="btn btn-sm btn-outline-success fw-bold px-2 py-1" t-on-click="() => this.onClickUsdBill(5)">$5</button>
+                        <button type="button" class="btn btn-sm btn-outline-success fw-bold px-2 py-1" t-on-click="() => this.onClickUsdBill(10)">$10</button>
+                        <button type="button" class="btn btn-sm btn-outline-success fw-bold px-2 py-1" t-on-click="() => this.onClickUsdBill(20)">$20</button>
+                        <button type="button" class="btn btn-sm btn-outline-success fw-bold px-2 py-1" t-on-click="() => this.onClickUsdBill(50)">$50</button>
+                        <button type="button" class="btn btn-sm btn-outline-success fw-bold px-2 py-1" t-on-click="() => this.onClickUsdBill(100)">$100</button>
+                        <button type="button" id="kamaleon-pos-custom-usd-btn" class="btn btn-sm btn-success fw-bold px-2 py-1" t-on-click="() => this.onClickCustomUsdBill()">
+                            💵 Otro $ (D)
+                        </button>
+                    </div>
+
+                    <!-- Tarjeta Visual del Vuelto en Bolívares (Slate Ferretería) -->
+                    <div t-if="hasUsdCashCalc" class="kamaleon-usd-change-card mt-2 px-3 py-2 rounded-3 d-flex align-items-center justify-content-between gap-3 w-100" style="max-width: 520px; background: rgba(30, 41, 59, 0.45); border: 1.5px solid #64748B;">
+                        <div class="text-start">
+                            <div class="small text-muted">
+                                Billete Recibido: <strong class="text-light" t-esc="usdReceivedFormatted"/>
+                                <span class="mx-1">|</span>
+                                Cobrado: <strong class="text-light" t-esc="usdChargedFormatted"/>
+                            </div>
+                            <div class="fs-5 fw-bolder text-light mt-1">
+                                🔄 Vuelto en Bs.: <span class="text-info" t-esc="usdChangeBsFormatted"/>
+                                <span class="fs-6 fw-normal text-muted ms-1">(Ref: <t t-esc="usdChangeUsdFormatted"/>)</span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Limpiar cálculo" t-on-click="() => this.onClearUsdBill()">✕</button>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+    <!-- 4. Líneas de Pago en Bolívares (PaymentScreenPaymentLines) -->
+    <t t-inherit="point_of_sale.PaymentScreenPaymentLines" t-inherit-mode="extension">
+        <xpath expr="(//div[hasclass('payment-amount')]/t)[1]" position="replace">
+            <t t-esc="formatPaymentLineAmount(line)"/>
+        </xpath>
+        <xpath expr="(//div[hasclass('payment-amount')]/t)[2]" position="replace">
+            <t t-esc="formatPaymentLineAmount(line)"/>
+        </xpath>
+    </t>
+
+    <!-- 5. Boleta / Recibo en Bolívares (OrderReceipt) -->
+    <t t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
+        <!-- Modo exclusivo RZ Marquet en el contenedor de la boleta -->
+        <xpath expr="//div[hasclass('pos-receipt')]" position="attributes">
+            <attribute name="t-att-class">{ 'rz-receipt-mode': props.data.is_rz_receipt }</attribute>
+        </xpath>
+
+        <!-- Bloque exclusivo para Boleta Térmica de Caja (Ferretería Mercado) -->
+        <xpath expr="//div[hasclass('pos-receipt')]" position="inside">
+            <t t-if="props.data.is_rz_receipt">
+                <div class="rz-receipt-container">
+                    <div class="rz-marker-r" style="text-align: center; font-size: 16px; font-weight: bold; margin-bottom: 4px;">Ferretería Mercado</div>
+                    <div class="rz-header-thanks">¡Gracias por su compra!</div>
+                    <div class="rz-client-info">
+                        <div>Cliente: <t t-esc="props.data.rz_partner_name || 'Consumidor Final'"/></div>
+                        <div>Cédula / RIF: <t t-esc="props.data.rz_partner_vat || 'V-00000000'"/></div>
+                    </div>
+                    <table class="rz-table">
+                        <colgroup>
+                            <col class="col-cant"/>
+                            <col class="col-prod"/>
+                            <col class="col-total"/>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="col-cant">Cant.</th>
+                                <th class="col-prod">Artículo</th>
+                                <th class="col-total">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="props.data.rz_lines" t-as="line" t-key="line.id">
+                                <td class="col-cant"><t t-esc="line.qty_str"/></td>
+                                <td class="col-prod">
+                                    <div class="rz-prod-name"><t t-esc="line.name"/></div>
+                                    <t t-if="line.show_unit_detail">
+                                        <div class="rz-prod-unit-detail"><t t-esc="line.unit_detail_str"/></div>
+                                    </t>
+                                </td>
+                                <td class="col-total"><t t-esc="line.price_subtotal_bs"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="rz-total-section">
+                        <span class="rz-total-label">Total:</span>
+                        <span class="rz-total-value"><t t-esc="props.data.rz_total_bs"/></span>
+                    </div>
+                    <div t-if="props.data.has_usd_cash_calc" style="text-align: right; font-size: 12px; margin-top: 4px; border-top: 1px dotted #000; padding-top: 4px;">
+                        <div>Recibido: <strong><t t-esc="props.data.usd_received_bs_formatted"/></strong></div>
+                        <div>Vuelto: <strong><t t-esc="props.data.usd_change_bs_formatted"/></strong></div>
+                    </div>
+                    <div class="rz-footer-slogan" style="margin-top: 12px; text-align: center; font-size: 12px; font-weight: bold;">Calidad y servicio para su hogar y taller</div>
+                </div>
+            </t>
+        </xpath>
+
+        <!-- Reemplazo del Total en la Boleta Estándar -->
+        <xpath expr="//div[hasclass('receipt-total')]/span" position="replace">
+            <t t-if="props.data.is_receipt_in_bs">
+                <span t-esc="props.data.amount_total_bs" class="pos-receipt-right-align fw-bolder"/>
+            </t>
+            <t t-else="">
+                <span t-esc="props.formatCurrency(taxTotals.order_sign * taxTotals.order_total)" class="pos-receipt-right-align"/>
+            </t>
+        </xpath>
+
+        <!-- Reemplazo de Líneas de Pago en la Boleta -->
+        <xpath expr="//div[hasclass('paymentlines')]/span" position="replace">
+            <t t-if="props.data.is_receipt_in_bs">
+                <span t-esc="line.amount_bs || props.formatCurrency(line.amount)" class="pos-receipt-right-align"/>
+            </t>
+            <t t-else="">
+                <span t-esc="props.formatCurrency(line.amount)" class="pos-receipt-right-align"/>
+            </t>
+        </xpath>
+
+        <!-- Reemplazo de Vuelto / Cambio en la Boleta -->
+        <xpath expr="//div[hasclass('receipt-change')]/span" position="replace">
+            <t t-if="props.data.is_receipt_in_bs">
+                <span t-esc="props.data.order_change_bs || props.formatCurrency(props.data.order_change)" class="pos-receipt-right-align"/>
+            </t>
+            <t t-else="">
+                <span t-esc="props.formatCurrency(props.data.order_change)" class="pos-receipt-right-align"/>
+            </t>
+        </xpath>
+
+        <!-- Desglose de Monto Recibido y Vuelto exclusivamente en Bolívares en Boleta Estándar -->
+        <xpath expr="//div[hasclass('receipt-change')]" position="after">
+            <t t-if="props.data.has_usd_cash_calc">
+                <div class="pos-receipt-amount receipt-usd-calc" style="font-size: 90%; margin-top: 4px; border-top: 1px dashed #555; padding-top: 4px;">
+                    <div>
+                        Recibido:
+                        <span t-esc="props.data.usd_received_bs_formatted" class="pos-receipt-right-align fw-bold"/>
+                    </div>
+                    <div>
+                        Vuelto:
+                        <span t-esc="props.data.usd_change_bs_formatted" class="pos-receipt-right-align fw-bolder"/>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

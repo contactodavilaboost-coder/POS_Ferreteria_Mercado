@@ -1,0 +1,9 @@
+// -*- coding: utf-8 -*-
+// Desactivar marcas de agua en reportes impresos de Odoo (Órdenes de venta, cotizaciones, etc.)
+.o_report_layout_background {
+    background-image: none !important;
+}
+
+div.article.o_report_layout_background {
+    background-image: none !important;
+}
