@@ -13,13 +13,10 @@ export class SalesDashboardAction extends Component {
         
         this.purchasesVsSalesCanvas = useRef("purchasesVsSalesCanvas");
         this.salesTrendCanvas = useRef("salesTrendChartCanvas");
-        this.collectionCanvas = useRef("collectionChartCanvas");
-        this.agingCanvas = useRef("agingChartCanvas");
-        this.topClientsCanvas = useRef("topClientsChartCanvas");
+        this.paymentMethodsCanvas = useRef("paymentMethodsChartCanvas");
+        this.cashierCanvas = useRef("cashierChartCanvas");
         this.top50Canvas = useRef("top50ChartCanvas");
-        this.routesCanvas = useRef("routesChartCanvas");
-        this.sellersCanvas = useRef("sellersChartCanvas");
-        this.fillRateCanvas = useRef("fillRateChartCanvas");
+        this.topClientsCanvas = useRef("topClientsChartCanvas");
 
         const today = new Date();
         const firstDayOfYear = `${today.getFullYear()}-01-01`;
@@ -28,25 +25,20 @@ export class SalesDashboardAction extends Component {
         this.state = useState({
             dateFrom: firstDayOfYear,
             dateTo: lastDay,
-            currentPreset: 'all',
+            currentPreset: 'month',
             kpis: {
                 total_sales: 0,
-                total_purchases: 0,
-                total_invoiced: 0,
-                total_collected: 0,
                 total_orders: 0,
                 avg_ticket: 0,
-                collection_rate: 0,
-                fill_rate: 0,
-                total_overdue: 0,
-                overdue_count: 0,
-                low_stock_count: 0,
+                total_purchases: 0,
                 total_inv_cost: 0,
                 total_inv_sale: 0,
+                low_stock_count: 0,
+                total_collected: 0,
+                collection_rate: 0,
             },
             data: null,
             low_stock_products: [],
-            overdue_invoices: [],
             isLoading: true,
         });
 
@@ -71,21 +63,21 @@ export class SalesDashboardAction extends Component {
         if (window.Chart) return;
         return new Promise((resolve) => {
             const script = document.createElement("script");
-            script.src = "/kamaleon_erp/static/lib/chart.js";
+            script.src = "/kamaleon_dashboard/static/lib/chart.js";
             script.onload = () => {
-                console.log("[Kamaleon ERP] Local Chart.js loaded successfully");
+                console.log("[Ferretería Mercado] Local Chart.js loaded successfully");
                 resolve();
             };
             script.onerror = () => {
-                console.warn("[Kamaleon ERP] Local Chart.js failed, loading from CDN fallback...");
+                console.warn("[Ferretería Mercado] Local Chart.js failed, loading from CDN fallback...");
                 const cdnScript = document.createElement("script");
                 cdnScript.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js";
                 cdnScript.onload = () => {
-                    console.log("[Kamaleon ERP] CDN Chart.js loaded successfully");
+                    console.log("[Ferretería Mercado] CDN Chart.js loaded successfully");
                     resolve();
                 };
                 cdnScript.onerror = (err) => {
-                    console.error("[Kamaleon ERP] Failed to load Chart.js:", err);
+                    console.error("[Ferretería Mercado] Failed to load Chart.js:", err);
                     resolve();
                 };
                 document.head.appendChild(cdnScript);
@@ -108,11 +100,10 @@ export class SalesDashboardAction extends Component {
                 this.state.dateFrom = data.date_from || this.state.dateFrom;
                 this.state.dateTo = data.date_to || this.state.dateTo;
                 this.state.low_stock_products = data.low_stock_products || [];
-                this.state.overdue_invoices = data.overdue_invoices || [];
                 this.scheduleRender(100);
             }
         } catch (error) {
-            console.error("[Kamaleon ERP] Error fetching sales analytics data:", error);
+            console.error("[Ferretería Mercado] Error fetching POS analytics data:", error);
         } finally {
             this.state.isLoading = false;
         }
@@ -132,45 +123,57 @@ export class SalesDashboardAction extends Component {
         return (num || 0).toLocaleString("es-VE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    openOverdueInvoices() {
-        const todayStr = (this.state.data && this.state.data.today) || new Date().toISOString().split('T')[0];
-        const domain = [
-            ['move_type', '=', 'out_invoice'],
-            ['state', '=', 'posted'],
-            ['payment_state', 'in', ['not_paid', 'partial', 'in_payment']],
-            ['amount_residual', '>', 0],
-            ['invoice_date_due', '!=', false],
-            ['invoice_date_due', '<', todayStr],
-        ];
-
-        if (this.state.data && this.state.data.rz_partner_ids && this.state.data.rz_partner_ids.length > 0) {
-            domain.push(['partner_id', 'not in', this.state.data.rz_partner_ids]);
-        }
-
+    openPosOrders() {
         this.action.doAction({
-            name: "Cartera Vencida — Cuentas por Cobrar en Mora",
+            name: "Pedidos de Punto de Venta",
             type: 'ir.actions.act_window',
-            res_model: 'account.move',
+            res_model: 'pos.order',
             views: [
                 [false, 'list'],
                 [false, 'form'],
             ],
-            domain: domain,
-            context: {
-                search_default_posted: 1,
-            }
+            target: 'current',
         });
     }
 
-    openInvoice(invoiceId) {
-        if (!invoiceId) return;
+    openPurchases() {
         this.action.doAction({
-            name: "Factura",
-            type: "ir.actions.act_window",
-            res_model: "account.move",
-            res_id: invoiceId,
-            views: [[false, "form"]],
-            target: "current",
+            name: "Órdenes de Compra",
+            type: 'ir.actions.act_window',
+            res_model: 'purchase.order',
+            views: [
+                [false, 'list'],
+                [false, 'form'],
+            ],
+            target: 'current',
+        });
+    }
+
+    openInventoryQuants() {
+        this.action.doAction({
+            name: "Valoración de Stock en Almacén",
+            type: 'ir.actions.act_window',
+            res_model: 'stock.quant',
+            views: [
+                [false, 'list'],
+                [false, 'pivot'],
+            ],
+            domain: [['location_id.usage', '=', 'internal']],
+            target: 'current',
+        });
+    }
+
+    openLowStockProducts() {
+        this.action.doAction({
+            name: "Artículos con Stock Crítico",
+            type: 'ir.actions.act_window',
+            res_model: 'product.product',
+            views: [
+                [false, 'list'],
+                [false, 'form'],
+            ],
+            domain: [['qty_available', '<=', 5], ['type', '=', 'consu']],
+            target: 'current',
         });
     }
 
@@ -179,7 +182,7 @@ export class SalesDashboardAction extends Component {
             try {
                 this.chartInstances[key].destroy();
             } catch (e) {
-                console.warn(`[Kamaleon ERP] Error destroying chart ${key}:`, e);
+                console.warn(`[Ferretería Mercado] Error destroying chart ${key}:`, e);
             }
             delete this.chartInstances[key];
         }
@@ -208,22 +211,22 @@ export class SalesDashboardAction extends Component {
         if (!ChartLib) {
             if (this.renderAttempts < 5) {
                 this.renderAttempts++;
-                console.warn(`[Kamaleon ERP] Chart.js not ready yet. Retrying (${this.renderAttempts}/5)...`);
+                console.warn(`[Ferretería Mercado] Chart.js not ready yet. Retrying (${this.renderAttempts}/5)...`);
                 this.scheduleRender(250);
             } else {
-                console.error("[Kamaleon ERP] Chart.js could not be loaded.");
+                console.error("[Ferretería Mercado] Chart.js could not be loaded.");
             }
             return;
         }
 
         const data = this.state.data;
 
-        // 0. Compras vs Ventas
+        // 1. Compras vs Ventas
         try {
             this.renderPurchasesVsSalesChart(ChartLib, data.purchases_vs_sales);
         } catch (e) { console.error("[Chart] Error in PurchasesVsSales:", e); }
 
-        // 1. Tendencia de Ventas del Mes
+        // 2. Tendencia Diaria de Ventas POS
         try {
             this.destroyChart("salesTrend");
             if (this.salesTrendCanvas.el && data.sales_trend) {
@@ -233,14 +236,14 @@ export class SalesDashboardAction extends Component {
                     data: {
                         labels: data.sales_trend.labels || [],
                         datasets: [{
-                            label: "Ventas ($)",
-                            data: data.sales_trend.data || [],
-                            borderColor: "#34d399",
-                            backgroundColor: "rgba(52, 211, 153, 0.15)",
+                            label: "Ventas POS ($)",
+                            data: data.sales_trend.values || [],
+                            borderColor: "#38bdf8",
+                            backgroundColor: "rgba(56, 189, 248, 0.15)",
                             borderWidth: 3,
                             fill: true,
                             tension: 0.35,
-                            pointBackgroundColor: "#059669",
+                            pointBackgroundColor: "#0284c7",
                             pointRadius: 4,
                         }]
                     },
@@ -249,18 +252,18 @@ export class SalesDashboardAction extends Component {
             }
         } catch (e) { console.error("[Chart] Error in SalesTrend:", e); }
 
-        // 2. Cobranza Exitosa del Mes
+        // 3. Distribución de Métodos de Pago POS
         try {
-            this.destroyChart("collection");
-            if (this.collectionCanvas.el && data.collection) {
-                const ctx = this.collectionCanvas.el.getContext("2d");
-                this.chartInstances.collection = new ChartLib(ctx, {
+            this.destroyChart("paymentMethods");
+            if (this.paymentMethodsCanvas.el && data.payment_methods) {
+                const ctx = this.paymentMethodsCanvas.el.getContext("2d");
+                this.chartInstances.paymentMethods = new ChartLib(ctx, {
                     type: "doughnut",
                     data: {
-                        labels: data.collection.labels || [],
+                        labels: data.payment_methods.labels || [],
                         datasets: [{
-                            data: data.collection.data || [],
-                            backgroundColor: ["#3b82f6", "#10b981", "#ef4444"],
+                            data: data.payment_methods.values || [],
+                            backgroundColor: ["#10b981", "#38bdf8", "#f59e0b", "#8b5cf6", "#ec4899", "#64748b"],
                             borderWidth: 0,
                         }]
                     },
@@ -268,105 +271,57 @@ export class SalesDashboardAction extends Component {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { position: 'bottom', labels: { color: '#ffffff', font: { size: 12 } } },
+                            legend: { position: 'bottom', labels: { color: '#f8fafc', font: { size: 12 } } },
                             tooltip: {
                                 callbacks: {
-                                    label: (ctx) => ` $${(ctx.raw || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}`
+                                    label: (ctx) => ` $${(ctx.raw || 0).toLocaleString('es-VE', {minimumFractionDigits: 2})}`
                                 }
                             }
                         }
                     }
                 });
             }
-        } catch (e) { console.error("[Chart] Error in Collection:", e); }
+        } catch (e) { console.error("[Chart] Error in PaymentMethods:", e); }
 
-        // 3. Cartera Vencida por Antigüedad
+        // 4. Rendimiento por Caja / Cajero
         try {
-            this.destroyChart("aging");
-            if (this.agingCanvas.el && data.aging_receivables) {
-                const ctx = this.agingCanvas.el.getContext("2d");
-                this.chartInstances.aging = new ChartLib(ctx, {
+            this.destroyChart("cashierSales");
+            if (this.cashierCanvas.el && data.cashier_sales) {
+                const ctx = this.cashierCanvas.el.getContext("2d");
+                this.chartInstances.cashierSales = new ChartLib(ctx, {
                     type: "bar",
                     data: {
-                        labels: data.aging_receivables.labels || [],
+                        labels: data.cashier_sales.labels || [],
                         datasets: [{
-                            label: "Monto Pendiente ($)",
-                            data: data.aging_receivables.data || [],
-                            backgroundColor: data.aging_receivables.colors || ["#10b981", "#3b82f6", "#f59e0b", "#ef4444"],
-                            borderRadius: 8,
-                        }]
-                    },
-                    options: {
-                        ...this.getCommonChartOptions(),
-                        onClick: () => {
-                            this.openOverdueInvoices();
-                        }
-                    }
-                });
-            }
-        } catch (e) { console.error("[Chart] Error in Aging:", e); }
-
-        // 4. Top 30 Clientes VIP
-        try {
-            this.destroyChart("topClients");
-            if (this.topClientsCanvas.el && data.top_clients) {
-                const ctx = this.topClientsCanvas.el.getContext("2d");
-                this.chartInstances.topClients = new ChartLib(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: data.top_clients.labels || [],
-                        datasets: [{
-                            label: "Compras Totales ($)",
-                            data: data.top_clients.data || [],
-                            backgroundColor: "rgba(56, 189, 248, 0.85)",
+                            label: "Total Ventas ($)",
+                            data: data.cashier_sales.values || [],
+                            backgroundColor: "rgba(148, 163, 184, 0.85)",
+                            borderColor: "#94a3b8",
+                            borderWidth: 1,
                             borderRadius: 6,
-                            categoryPercentage: 0.85,
-                            barPercentage: 0.9,
                         }]
                     },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                ticks: {
-                                    color: "#94a3b8",
-                                    callback: (val) => '$' + (val || 0).toLocaleString('en-US', {minimumFractionDigits: 0})
-                                },
-                                grid: { color: "rgba(255,255,255,0.05)" }
-                            },
-                            y: {
-                                ticks: { color: "#ffffff", font: { size: 11, weight: 'bold' } },
-                                grid: { display: false }
-                            }
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (ctx) => ` Compras: $${(ctx.raw || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}`
-                                }
-                            }
-                        }
-                    }
+                    options: this.getCommonChartOptions()
                 });
             }
-        } catch (e) { console.error("[Chart] Error in TopClients:", e); }
+        } catch (e) { console.error("[Chart] Error in CashierSales:", e); }
 
-        // 5. Top 50 Productos Más Vendidos
+        // 5. Top 50 Artículos de Ferretería
         try {
             this.destroyChart("top50");
-            if (this.top50Canvas.el && data.top_50_products) {
+            if (this.top50Canvas.el && data.top_products) {
                 const ctx = this.top50Canvas.el.getContext("2d");
+                const labels = data.top_products.map(p => p.name);
+                const values = data.top_products.map(p => p.qty);
+
                 this.chartInstances.top50 = new ChartLib(ctx, {
                     type: "bar",
                     data: {
-                        labels: data.top_50_products.labels || [],
+                        labels: labels,
                         datasets: [{
-                            label: "Unidades Vendidas",
-                            data: data.top_50_products.qty_data || [],
-                            backgroundColor: "rgba(52, 211, 153, 0.8)",
+                            label: "Unidades Despachadas",
+                            data: values,
+                            backgroundColor: "rgba(56, 189, 248, 0.85)",
                             borderRadius: 5,
                             categoryPercentage: 0.85,
                             barPercentage: 0.9,
@@ -387,7 +342,7 @@ export class SalesDashboardAction extends Component {
                             legend: { display: false },
                             tooltip: {
                                 callbacks: {
-                                    label: (ctx) => ` Vendidos: ${(ctx.raw || 0).toLocaleString()} uds`
+                                    label: (ctx) => ` Despachados: ${(ctx.raw || 0).toLocaleString()} uds`
                                 }
                             }
                         }
@@ -396,100 +351,56 @@ export class SalesDashboardAction extends Component {
             }
         } catch (e) { console.error("[Chart] Error in Top50:", e); }
 
-        // 6. Ventas por Ruta
+        // 6. Top Clientes de Mostrador
         try {
-            this.destroyChart("routes");
-            if (this.routesCanvas.el && data.routes) {
-                const ctx = this.routesCanvas.el.getContext("2d");
-                this.chartInstances.routes = new ChartLib(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: data.routes.labels || [],
-                        datasets: [{
-                            label: "Monto ($)",
-                            data: data.routes.data || [],
-                            backgroundColor: "rgba(99, 102, 241, 0.85)",
-                            borderRadius: 8,
-                        }]
-                    },
-                    options: this.getCommonChartOptions()
-                });
-            }
-        } catch (e) { console.error("[Chart] Error in Routes:", e); }
+            this.destroyChart("topClients");
+            if (this.topClientsCanvas.el && data.top_clients) {
+                const ctx = this.topClientsCanvas.el.getContext("2d");
+                const labels = data.top_clients.map(c => c.name);
+                const values = data.top_clients.map(c => c.total);
 
-        // 7. Ventas por Vendedor
-        try {
-            this.destroyChart("sellers");
-            if (this.sellersCanvas.el) {
-                const ctx = this.sellersCanvas.el.getContext("2d");
-                this.chartInstances.sellers = new ChartLib(ctx, {
+                this.chartInstances.topClients = new ChartLib(ctx, {
                     type: "bar",
                     data: {
-                        labels: (data.sellers && data.sellers.labels) || [],
+                        labels: labels,
                         datasets: [{
-                            label: "Monto ($)",
-                            data: (data.sellers && data.sellers.data) || [],
-                            backgroundColor: "rgba(168, 85, 247, 0.85)",
-                            borderRadius: 8,
-                        }]
-                    },
-                    options: this.getCommonChartOptions()
-                });
-            }
-        } catch (e) { console.error("[Chart] Error in Sellers:", e); }
-
-        // 8. Fill Rate - Pedido vs Entregado (en $)
-        try {
-            this.destroyChart("fillRate");
-            if (this.fillRateCanvas.el && data.fill_rate) {
-                const ctx = this.fillRateCanvas.el.getContext("2d");
-                const ordVal = (data.fill_rate && data.fill_rate.ordered) || 0;
-                const delVal = (data.fill_rate && data.fill_rate.delivered) || 0;
-                const pct = (data.fill_rate && data.fill_rate.percent) || 0;
-                this.chartInstances.fillRate = new ChartLib(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: [
-                            `Monto Solicitado ($ ${this.formatNumber(ordVal)})`,
-                            `Monto Entregado ($ ${this.formatNumber(delVal)})`
-                        ],
-                        datasets: [{
-                            label: `Monto en Dólares ($) — Fill Rate: ${pct}%`,
-                            data: [ordVal, delVal],
-                            backgroundColor: ["#f59e0b", "#10b981"],
-                            borderRadius: 8,
+                            label: "Compras Totales ($)",
+                            data: values,
+                            backgroundColor: "rgba(129, 140, 248, 0.85)",
+                            borderRadius: 6,
+                            categoryPercentage: 0.85,
+                            barPercentage: 0.9,
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                labels: { color: '#ffffff', font: { weight: 'bold' } }
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: "#94a3b8",
+                                    callback: (val) => '$' + (val || 0).toLocaleString('es-VE', {minimumFractionDigits: 0})
+                                },
+                                grid: { color: "rgba(255,255,255,0.05)" }
                             },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.dataset.label.split(' — ')[0]}: $${(context.raw || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                                    }
-                                }
+                            y: {
+                                ticks: { color: "#ffffff", font: { size: 11, weight: 'bold' } },
+                                grid: { display: false }
                             }
                         },
-                        scales: {
-                            x: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,0.05)" } },
-                            y: {
-                                ticks: {
-                                    color: "#ffffff",
-                                    callback: function(value) { return '$' + (value || 0).toLocaleString(); }
-                                },
-                                grid: { color: "rgba(255,255,255,0.08)" }
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => ` Compras: $${(ctx.raw || 0).toLocaleString('es-VE', {minimumFractionDigits: 2})}`
+                                }
                             }
                         }
                     }
                 });
             }
-        } catch (e) { console.error("[Chart] Error in FillRate:", e); }
+        } catch (e) { console.error("[Chart] Error in TopClients:", e); }
     }
 
     renderPurchasesVsSalesChart(ChartLib, data) {
@@ -505,18 +416,18 @@ export class SalesDashboardAction extends Component {
                 labels: data.labels || [],
                 datasets: [
                     {
-                        label: 'Ventas Facturadas ($)',
-                        data: data.sales_data || [],
-                        backgroundColor: 'rgba(16, 185, 129, 0.85)',
-                        borderColor: '#10b981',
+                        label: 'Ventas POS ($)',
+                        data: data.sales || [],
+                        backgroundColor: 'rgba(56, 189, 248, 0.85)',
+                        borderColor: '#38bdf8',
                         borderWidth: 1,
                         borderRadius: 6,
                     },
                     {
-                        label: 'Compras Facturadas ($)',
-                        data: data.purchases_data || [],
-                        backgroundColor: 'rgba(59, 130, 246, 0.85)',
-                        borderColor: '#3b82f6',
+                        label: 'Compras Ferretería ($)',
+                        data: data.purchases || [],
+                        backgroundColor: 'rgba(245, 158, 11, 0.85)',
+                        borderColor: '#f59e0b',
                         borderWidth: 1,
                         borderRadius: 6,
                     }
@@ -528,12 +439,12 @@ export class SalesDashboardAction extends Component {
                 plugins: {
                     legend: {
                         display: true,
-                        labels: { color: '#e2e8f0', font: { family: 'Inter, sans-serif', weight: 'bold' } }
+                        labels: { color: '#f8fafc', font: { family: 'Inter, sans-serif', weight: 'bold' } }
                     },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': $' + (context.raw || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
+                                return context.dataset.label + ': $' + (context.raw || 0).toLocaleString('es-VE', {minimumFractionDigits: 2});
                             }
                         }
                     }

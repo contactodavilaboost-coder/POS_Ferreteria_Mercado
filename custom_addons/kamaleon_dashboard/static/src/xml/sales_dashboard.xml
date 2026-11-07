@@ -5,18 +5,18 @@
             <!-- ── HEADER & CONTROLS ────────────────────────────────────────── -->
             <div class="dashboard-header">
                 <div class="dashboard-title">
-                    <h1><i class="fa fa-line-chart"/> Tablero de Analítica de Ventas</h1>
-                    <p>Zais Express C.A — Indicadores Ejecutivos en Tiempo Real</p>
+                    <h1><i class="fa fa-shopping-basket"/> Tablero de Analítica POS</h1>
+                    <p>Ferretería Mercado — Métricas de Punto de Venta &amp; Retail en Tiempo Real</p>
                 </div>
                 <div class="dashboard-controls">
                     <!-- Preset Filter Buttons -->
                     <div class="preset-filters btn-group me-2" role="group">
-                        <button class="btn btn-outline-emerald btn-sm" t-on-click="() => this.onPresetClick('today')">Hoy</button>
-                        <button class="btn btn-outline-emerald btn-sm" t-on-click="() => this.onPresetClick('week')">Esta Semana</button>
-                        <button class="btn btn-outline-emerald btn-sm" t-on-click="() => this.onPresetClick('month')">Este Mes</button>
-                        <button class="btn btn-outline-emerald btn-sm" t-on-click="() => this.onPresetClick('last_month')">Mes Anterior</button>
-                        <button class="btn btn-outline-emerald btn-sm" t-on-click="() => this.onPresetClick('year')">Año 2026</button>
-                        <button class="btn btn-outline-emerald btn-sm" t-on-click="() => this.onPresetClick('all')">Todo el Tiempo</button>
+                        <button class="btn btn-outline-secondary btn-sm" t-on-click="() => this.onPresetClick('today')">Hoy</button>
+                        <button class="btn btn-outline-secondary btn-sm" t-on-click="() => this.onPresetClick('week')">Esta Semana</button>
+                        <button class="btn btn-outline-secondary btn-sm" t-on-click="() => this.onPresetClick('month')">Este Mes</button>
+                        <button class="btn btn-outline-secondary btn-sm" t-on-click="() => this.onPresetClick('last_month')">Mes Anterior</button>
+                        <button class="btn btn-outline-secondary btn-sm" t-on-click="() => this.onPresetClick('year')">Año 2026</button>
+                        <button class="btn btn-outline-secondary btn-sm" t-on-click="() => this.onPresetClick('all')">Todo</button>
                     </div>
 
                     <input type="date" t-model="state.dateFrom" t-on-change="onDateChange"/>
@@ -30,196 +30,138 @@
 
             <!-- ── KPI STAT TILES ───────────────────────────────────────────── -->
             <div class="kpi-tiles-grid">
-                <div class="kpi-card">
-                    <div class="kpi-icon bg-emerald"><i class="fa fa-usd"/></div>
+                <!-- KPI 1: Ventas POS Totales -->
+                <div class="kpi-card" t-on-click="() => this.openPosOrders()" style="cursor: pointer;" title="Ver pedidos POS">
+                    <div class="kpi-icon bg-blue"><i class="fa fa-shopping-cart"/></div>
                     <div class="kpi-details">
-                        <div class="kpi-label">Ventas Totales</div>
+                        <div class="kpi-label">Ventas POS Totales</div>
                         <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.total_sales)"/></div>
-                        <div class="kpi-subtext"><t t-esc="state.kpis.total_orders"/> Pedidos Confirmados</div>
+                        <div class="kpi-subtext"><t t-esc="state.kpis.total_orders"/> Tickets Cobrados</div>
                     </div>
                 </div>
 
+                <!-- KPI 2: Ticket Promedio -->
                 <div class="kpi-card">
-                    <div class="kpi-icon bg-blue"><i class="fa fa-file-text-o"/></div>
+                    <div class="kpi-icon bg-emerald"><i class="fa fa-calculator"/></div>
                     <div class="kpi-details">
-                        <div class="kpi-label">Total Facturado</div>
-                        <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.total_invoiced)"/></div>
-                        <div class="kpi-subtext">Ticket Prom: $<t t-esc="formatNumber(state.kpis.avg_ticket)"/></div>
+                        <div class="kpi-label">Ticket Promedio</div>
+                        <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.avg_ticket)"/></div>
+                        <div class="kpi-subtext">Venta Media por Cliente</div>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon bg-purple"><i class="fa fa-credit-card"/></div>
+                <!-- KPI 3: Compras a Proveedores -->
+                <div class="kpi-card" t-on-click="() => this.openPurchases()" style="cursor: pointer;" title="Ver compras a proveedores">
+                    <div class="kpi-icon bg-amber"><i class="fa fa-truck"/></div>
                     <div class="kpi-details">
-                        <div class="kpi-label">Total Cobrado</div>
-                        <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.total_collected)"/></div>
-                        <div class="kpi-subtext"><t t-esc="state.kpis.collection_rate"/>% Cobranza Efectiva</div>
+                        <div class="kpi-label">Compras Realizadas</div>
+                        <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.total_purchases)"/></div>
+                        <div class="kpi-subtext">Reposición de Mercancía</div>
                     </div>
                 </div>
 
-                <!-- NUEVAS TARJETAS DE VALORACIÓN DE INVENTARIO -->
-                <div class="kpi-card">
-                    <div class="kpi-icon bg-emerald"><i class="fa fa-cubes"/></div>
+                <!-- KPI 4: Valoración de Inventario (Costo) -->
+                <div class="kpi-card" t-on-click="() => this.openInventoryQuants()" style="cursor: pointer;" title="Ver valoración de stock">
+                    <div class="kpi-icon bg-slate"><i class="fa fa-cubes"/></div>
                     <div class="kpi-details">
-                        <div class="kpi-label">Valor Inv. (Costo)</div>
+                        <div class="kpi-label">Inventario (Costo)</div>
                         <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.total_inv_cost)"/></div>
-                        <div class="kpi-subtext">Valorado a Precio Costo</div>
+                        <div class="kpi-subtext">Capital en Stock al Costo</div>
                     </div>
                 </div>
 
-                <div class="kpi-card">
+                <!-- KPI 5: Valoración de Inventario (PVP) -->
+                <div class="kpi-card" t-on-click="() => this.openInventoryQuants()" style="cursor: pointer;" title="Ver valoración de stock">
                     <div class="kpi-icon bg-purple"><i class="fa fa-tags"/></div>
                     <div class="kpi-details">
-                        <div class="kpi-label">Valor Inv. (Venta)</div>
+                        <div class="kpi-label">Inventario (PVP)</div>
                         <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.total_inv_sale)"/></div>
-                        <div class="kpi-subtext">Valorado a Precio Venta</div>
+                        <div class="kpi-subtext">Proyección a Precio Venta</div>
                     </div>
                 </div>
 
-                <div class="kpi-card kpi-card-clickable" t-on-click="() => this.openOverdueInvoices()" title="Haga clic para ver las facturas vencidas">
-                    <div class="kpi-icon bg-red"><i class="fa fa-exclamation-triangle"/></div>
-                    <div class="kpi-details">
-                        <div class="kpi-label">Cartera Vencida</div>
-                        <div class="kpi-value">$<t t-esc="formatNumber(state.kpis.total_overdue)"/></div>
-                        <div class="kpi-subtext">
-                            <span class="badge bg-danger text-white me-1"><t t-esc="state.kpis.overdue_count || 0"/> Facturas</span>
-                            <i class="fa fa-external-link"/> Ver detalle
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card">
+                <!-- KPI 6: Stock Crítico Ferretería -->
+                <div class="kpi-card" t-on-click="() => this.openLowStockProducts()" style="cursor: pointer;" title="Ver productos por agotarse">
                     <div class="kpi-icon bg-amber"><i class="fa fa-warning"/></div>
                     <div class="kpi-details">
                         <div class="kpi-label">Stock Crítico</div>
                         <div class="kpi-value"><t t-esc="state.kpis.low_stock_count"/> Prods</div>
-                        <div class="kpi-subtext">Próximos a Agotarse</div>
+                        <div class="kpi-subtext">Stock &lt;= 5 Unidades</div>
                     </div>
                 </div>
             </div>
 
             <!-- ── CHARTS GRID ──────────────────────────────────────────────── -->
             <div class="charts-grid">
-                <!-- NUEVO GRÁFICO: COMPARACIÓN COMPRAS VS VENTAS -->
+                <!-- CHART 1: COMPARACIÓN COMPRAS VS VENTAS -->
                 <div class="chart-card full-width">
                     <div class="chart-card-header">
-                        <h3><i class="fa fa-balance-scale text-emerald"/> Comparación Compras vs Ventas</h3>
-                        <span class="chart-badge bg-emerald text-dark fw-bold">Análisis Operativo</span>
+                        <h3><i class="fa fa-balance-scale"/> 1. Flujo Operativo: Compras vs Ventas POS</h3>
+                        <span class="chart-badge">Balance Entradas / Salidas</span>
                     </div>
                     <div class="chart-body" style="min-height: 280px;">
                         <canvas t-ref="purchasesVsSalesCanvas"/>
                     </div>
                 </div>
 
-                <!-- CHART 1: RESUMEN DE VENTAS DEL MES -->
+                <!-- CHART 2: TENDENCIA DIARIA DE VENTAS POS -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3><i class="fa fa-area-chart"/> 1. Resumen de Ventas del Mes</h3>
-                        <span class="chart-badge">Tendencia Diaria</span>
+                        <h3><i class="fa fa-line-chart"/> 2. Ventas Diarias del Punto de Venta</h3>
+                        <span class="chart-badge">Tendencia en Dólares ($)</span>
                     </div>
                     <div class="chart-body">
                         <canvas t-ref="salesTrendChartCanvas"/>
                     </div>
                 </div>
 
-                <!-- CHART 2: COBRANZA EXITOSA DEL MES -->
+                <!-- CHART 3: MÉTODOS DE COBRO (EFECTIVO, PAGO MÓVIL, TARJETA, BIOPAGO) -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3><i class="fa fa-pie-chart"/> 2. Cobranza Exitosa del Mes</h3>
-                        <span class="chart-badge">Facturado vs Cobrado</span>
+                        <h3><i class="fa fa-pie-chart"/> 3. Métodos de Cobro POS</h3>
+                        <span class="chart-badge">Efectivo vs Digitales</span>
                     </div>
                     <div class="chart-body">
-                        <canvas t-ref="collectionChartCanvas"/>
+                        <canvas t-ref="paymentMethodsChartCanvas"/>
                     </div>
                 </div>
 
-                <!-- CHART 3: ANÁLISIS DE CARTERA VENCIDA -->
+                <!-- CHART 4: RENDIMIENTO POR CAJA / CAJERO -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <div>
-                            <h3><i class="fa fa-clock-o text-danger"/> 3. Cartera Vencida por Antigüedad</h3>
-                            <div class="text-white-50" style="font-size: 0.72rem;">Calculado desde Fecha de Entrega</div>
-                        </div>
-                        <span class="chart-badge bg-danger text-white">Gestión de Cobranza</span>
+                        <h3><i class="fa fa-desktop"/> 4. Ventas por Caja / Cajero</h3>
+                        <span class="chart-badge">Rendimiento Operativo</span>
                     </div>
                     <div class="chart-body">
-                        <canvas t-ref="agingChartCanvas"/>
+                        <canvas t-ref="cashierChartCanvas"/>
                     </div>
                 </div>
 
-                <!-- WIDGET 3B: DETALLE FACTURAS VENCIDAS DESDE ENTREGA -->
+                <!-- CHART 5: TOP CLIENTES DE MOSTRADOR -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <div>
-                            <h3><i class="fa fa-list-alt text-danger"/> Facturas Vencidas</h3>
-                            <div class="text-white-50" style="font-size: 0.72rem;">Top Facturas en Mora</div>
-                        </div>
-                        <button class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 0.75rem;" t-on-click="() => this.openOverdueInvoices()">
-                            <i class="fa fa-external-link"/> Ver Todas (<t t-esc="state.kpis.overdue_count || 0"/>)
-                        </button>
+                        <h3><i class="fa fa-users"/> 5. Clientes Más Frecuentes</h3>
+                        <span class="chart-badge">Mayor Volumen de Compra</span>
                     </div>
-                    <div class="overdue-table-container">
-                        <table class="table table-dark table-hover table-striped align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Cliente</th>
-                                    <th>Factura</th>
-                                    <th>Entrega</th>
-                                    <th>Atraso</th>
-                                    <th class="text-end">Saldo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-if="state.overdue_invoices and state.overdue_invoices.length > 0">
-                                    <tr t-foreach="state.overdue_invoices.slice(0, 8)" t-as="inv" t-key="inv.id" class="clickable-row" t-on-click="() => this.openInvoice(inv.id)" title="Haga clic para ver la factura">
-                                        <td class="fw-bold text-white text-truncate" style="max-width: 130px;" t-att-title="inv.partner_name"><t t-esc="inv.partner_name"/></td>
-                                        <td><span class="badge bg-secondary"><t t-esc="inv.name"/></span></td>
-                                        <td><t t-esc="inv.delivery_date"/></td>
-                                        <td>
-                                            <span t-if="inv.days_overdue &gt; 15" class="badge bg-danger"><t t-esc="inv.overdue_info"/></span>
-                                            <span t-elif="inv.days_overdue &gt; 7" class="badge bg-warning text-dark"><t t-esc="inv.overdue_info"/></span>
-                                            <span t-else="" class="badge bg-info text-dark"><t t-esc="inv.overdue_info"/></span>
-                                        </td>
-                                        <td class="text-end text-danger fw-bold">$<t t-esc="formatNumber(inv.amount_residual)"/></td>
-                                    </tr>
-                                </t>
-                                <t t-else="">
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted py-4">
-                                            <i class="fa fa-check-circle text-success"/> ¡Excelente! No hay facturas entregadas con mora vencida.
-                                        </td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- CHART 8: TOP 30 CLIENTES VIP -->
-                <div class="chart-card full-width">
-                    <div class="chart-card-header">
-                        <h3><i class="fa fa-star"/> 4. Top 30 Clientes VIP</h3>
-                        <span class="chart-badge">Ranking por Compra ($)</span>
-                    </div>
-                    <div class="chart-body chart-body-top30">
+                    <div class="chart-body">
                         <canvas t-ref="topClientsChartCanvas"/>
                     </div>
                 </div>
 
-                <!-- WIDGET 9: ALERTA DE PRODUCTOS PRÓXIMOS A AGOTARSE -->
+                <!-- WIDGET 6: ALERTA DE STOCK CRÍTICO (TABLA) -->
                 <div class="chart-card full-width">
                     <div class="chart-card-header">
-                        <h3><i class="fa fa-warning text-warning"/> 5. Alerta de Productos Próximos a Agotarse</h3>
-                        <span class="chart-badge bg-amber">Inventario Crítico</span>
+                        <h3><i class="fa fa-exclamation-triangle text-warning"/> 6. Artículos de Ferretería con Stock Crítico</h3>
+                        <span class="chart-badge bg-amber text-dark fw-bold">Atención Inmediata</span>
                     </div>
                     <div class="low-stock-table-container">
                         <table class="table table-dark table-hover table-striped align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
+                                    <th>Artículo</th>
                                     <th>Código</th>
                                     <th>Stock Actual</th>
-                                    <th>Stock Mínimo</th>
+                                    <th>Umbral Mínimo</th>
                                     <th>Estado Almacén</th>
                                 </tr>
                             </thead>
@@ -239,7 +181,7 @@
                                 <t t-else="">
                                     <tr>
                                         <td colspan="5" class="text-center text-muted py-3">
-                                            <i class="fa fa-check-circle text-success"/> Todos los productos cuentan con nivel de inventario óptimo.
+                                            <i class="fa fa-check-circle text-success"/> Todos los artículos de ferretería cuentan con niveles de inventario óptimos.
                                         </td>
                                     </tr>
                                 </t>
@@ -248,47 +190,14 @@
                     </div>
                 </div>
 
-                <!-- CHART 3: TOP 50 PRODUCTOS MÁS VENDIDOS -->
+                <!-- CHART 7: TOP 50 ARTÍCULOS DE FERRETERÍA MÁS VENDIDOS -->
                 <div class="chart-card full-width">
                     <div class="chart-card-header">
-                        <h3><i class="fa fa-bar-chart"/> 6. Top 50 Productos Más Vendidos</h3>
-                        <span class="chart-badge">Ranking por Unidades</span>
+                        <h3><i class="fa fa-wrench"/> 7. Top 50 Artículos de Ferretería Más Vendidos</h3>
+                        <span class="chart-badge">Ranking por Unidades Despachadas</span>
                     </div>
-                    <div class="chart-body chart-body-top50">
+                    <div class="chart-body" style="min-height: 400px;">
                         <canvas t-ref="top50ChartCanvas"/>
-                    </div>
-                </div>
-
-                <!-- CHART 4: RESUMEN DE VENTAS POR RUTAS -->
-                <div class="chart-card">
-                    <div class="chart-card-header">
-                        <h3><i class="fa fa-map-marker"/> 7. Ventas por Ruta Comercial</h3>
-                        <span class="chart-badge">Rutas Activas</span>
-                    </div>
-                    <div class="chart-body">
-                        <canvas t-ref="routesChartCanvas"/>
-                    </div>
-                </div>
-
-                <!-- CHART 5: RESUMEN DE VENTAS POR VENDEDOR -->
-                <div class="chart-card">
-                    <div class="chart-card-header">
-                        <h3><i class="fa fa-users"/> 8. Ventas por Vendedor</h3>
-                        <span class="chart-badge">Equipo de Ventas</span>
-                    </div>
-                    <div class="chart-body">
-                        <canvas t-ref="sellersChartCanvas"/>
-                    </div>
-                </div>
-
-                <!-- CHART 6: FILL RATE (PEDIDO VS ENTREGADO EN DÓLARES) -->
-                <div class="chart-card full-width">
-                    <div class="chart-card-header">
-                        <h3><i class="fa fa-check-square-o"/> 9. Fill Rate — Pedido vs Entregado en Moneda ($)</h3>
-                        <span class="chart-badge bg-emerald text-dark fw-bold">Efectividad: <t t-esc="state.data and state.data.fill_rate ? state.data.fill_rate.percent : 100"/>%</span>
-                    </div>
-                    <div class="chart-body">
-                        <canvas t-ref="fillRateChartCanvas"/>
                     </div>
                 </div>
             </div>
